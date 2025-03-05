@@ -1,10 +1,13 @@
 
-import { Button } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
+import { CreateRoom } from "@/components/features/CreateRoom";
 
 export default function Home() {
   return (
     <main>
-      <Button colorPalette={"blue"}>Click me</Button>
+      <VStack minH="100vh" justify="center" align="center">
+        <CreateRoom />
+      </VStack>
     </main>
   );
 }
