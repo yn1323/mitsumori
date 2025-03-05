@@ -1,11 +1,11 @@
 "use client";
 
+import { db } from "@/libs/firebase";
 import { Box, Button, Text, VStack } from "@chakra-ui/react";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { db } from "@/libs/firebase";
 
 export const CreateRoom = () => {
   const router = useRouter();
@@ -13,8 +13,10 @@ export const CreateRoom = () => {
     status: "success" | "error";
     message: string;
   } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = async () => {
+    setIsLoading(true);
     try {
       const newRoomId = uuidv4();
       const roomRef = doc(collection(db, "mitsumori", "room", newRoomId));
@@ -24,6 +26,7 @@ export const CreateRoom = () => {
 
       router.push(`/${newRoomId}`);
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
       setAlert({
         status: "error",
@@ -48,6 +51,8 @@ export const CreateRoom = () => {
           size="lg"
           width="full"
           onClick={handleClick}
+          loadingText="作成中..."
+          loading={isLoading}
         >
           ルームを作成
         </Button>
