@@ -52,3 +52,4 @@
 
 ## ターミナル
 - PowerShellを利用
+- git add のあとにgit commitする場合、&&ではなく;でつなげてください
