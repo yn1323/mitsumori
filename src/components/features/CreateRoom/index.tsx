@@ -19,7 +19,7 @@ export const CreateRoom = () => {
     setIsLoading(true);
     try {
       const newRoomId = uuidv4();
-      const roomRef = doc(collection(db, "mitsumori", "room", newRoomId));
+      const roomRef = doc(collection(db, "mitsumori", "room", newRoomId), "_roomInfo");
       await setDoc(roomRef, {
         createdAt: new Date(),
       });

@@ -1,6 +1,6 @@
+import { db } from "@/libs/firebase";
 import { Text, VStack } from "@chakra-ui/react";
 import { collection, doc, getDoc } from "firebase/firestore";
-import { db } from "@/libs/firebase";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -11,10 +11,26 @@ type Props = {
 
 export default async function RoomPage({ params }: Props) {
   const { roomId } = await Promise.resolve(params);
-  const roomRef = doc(collection(db, "mitsumori", "room", roomId));
+  const roomRef = doc(collection(db, "mitsumori", "room", roomId), "_roomInfo");
   const roomDoc = await getDoc(roomRef);
 
   if (!roomDoc.exists()) {
+    notFound();
+  }
+
+  const data = roomDoc.data();
+  const createdAt = data?.createdAt?.toDate();
+  
+  if (!createdAt) {
+    notFound();
+  }
+
+  // 1ヶ月前の日付を計算
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+  // createdAtが1ヶ月以上前の場合は404
+  if (createdAt < oneMonthAgo) {
     notFound();
   }
 
