@@ -3,9 +3,9 @@
 import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
 import { Text, VStack, useDisclosure } from "@chakra-ui/react";
-import { InitialModal } from "./InitialModal";
 import { signInAnonymously, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { InitialModal } from "./InitialModal";
 type Props = {
   roomId: string;
 };
