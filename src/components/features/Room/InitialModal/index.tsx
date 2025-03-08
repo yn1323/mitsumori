@@ -1,4 +1,3 @@
-
 import {
   DialogBody,
   DialogContent,
@@ -20,6 +19,12 @@ type Props = {
 export const InitialModal = ({ isOpen, onClose }: Props) => {
   if (!isOpen) return null;
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const value = formData.get("role") as "player" | "spectator";
+  };
+
   return (
     <DialogRoot
       defaultOpen
@@ -27,18 +32,14 @@ export const InitialModal = ({ isOpen, onClose }: Props) => {
       closeOnInteractOutside={false}
       placement="center"
     >
-      <form
-        onSubmit={(e) => {
-          console.log(e.currentTarget.elements);
-        }}
-      >
-        <DialogContent>
+      <DialogContent>
+        <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>参加方法の選択</DialogTitle>
           </DialogHeader>
           <DialogBody>
             <RadioGroup>
-              <RadioCardRoot>
+              <RadioCardRoot name="role">
                 <RadioCardItem
                   label="プレイヤー"
                   description="プランニングポーカーで見積もりを行います。"
@@ -55,12 +56,12 @@ export const InitialModal = ({ isOpen, onClose }: Props) => {
             </RadioGroup>
           </DialogBody>
           <DialogFooter>
-            <Button type="submit" colorScheme="blue" onClick={onClose}>
+            <Button type="submit" colorScheme="blue">
               参加する
             </Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </DialogRoot>
   );
 };
