@@ -2,7 +2,8 @@
 
 import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
-import { Text, VStack } from "@chakra-ui/react";
+import { Text, VStack, useDisclosure } from "@chakra-ui/react";
+import { InitialModal } from "./InitialModal";
 import { signInAnonymously, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 
 export const Room = ({ roomId }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
+  const { open: isOpen, onClose } = useDisclosure({ defaultOpen: true });
 
   useEffect(() => {
     const cleanup = () => {
@@ -63,6 +65,7 @@ export const Room = ({ roomId }: Props) => {
   return (
     <VStack minH="100vh" justify="center" align="center">
       <Text>ルームID: {roomId}</Text>
+      <InitialModal isOpen={isOpen} onClose={onClose} />
     </VStack>
   );
 };
