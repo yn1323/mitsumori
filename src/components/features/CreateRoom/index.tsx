@@ -19,9 +19,25 @@ export const CreateRoom = () => {
       const newRoomId = uuidv4();
       const roomRef = doc(
         collection(db, "mitsumori", "room", newRoomId),
-        "_roomInfo",
+        "roomInfo",
       );
       await setDoc(roomRef, {
+        createdAt: new Date(),
+      });
+
+      const player = doc(
+        collection(db, "mitsumori", "room", newRoomId),
+        "player",
+      );
+      await setDoc(player, {
+        createdAt: new Date(),
+      });
+
+      const spectator = doc(
+        collection(db, "mitsumori", "room", newRoomId),
+        "spectator",
+      );
+      await setDoc(spectator, {
         createdAt: new Date(),
       });
 

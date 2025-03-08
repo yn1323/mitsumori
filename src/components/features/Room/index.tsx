@@ -65,7 +65,7 @@ export const Room = ({ roomId }: Props) => {
   return (
     <VStack minH="100vh" justify="center" align="center">
       <Text>ルームID: {roomId}</Text>
-      <InitialModal isOpen={isOpen} onClose={onClose} />
+      <InitialModal isOpen={isOpen} onClose={onClose} roomId={roomId} />
     </VStack>
   );
 };

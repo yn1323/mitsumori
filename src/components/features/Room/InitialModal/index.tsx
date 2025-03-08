@@ -8,21 +8,55 @@ import {
 } from "@/components/ui/dialog";
 import { RadioGroup } from "@/components/ui/radio";
 import { RadioCardItem, RadioCardRoot } from "@/components/ui/radio-card";
-
+import { toaster } from "@/components/ui/toaster";
+import { auth, db } from "@/libs/firebase";
 import { Button } from "@chakra-ui/react";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { useState } from "react";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  roomId: string;
 };
 
-export const InitialModal = ({ isOpen, onClose }: Props) => {
+export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const value = formData.get("role") as "player" | "spectator";
+    setIsLoading(true);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const value = formData.get("role") as "player" | "spectator";
+      const uid = auth.currentUser?.uid;
+
+      if (!uid) {
+        throw new Error("ユーザーが認証されていません");
+      }
+
+      const membersRef = doc(
+        collection(db, "mitsumori", "room", roomId, value, uid),
+      );
+      await setDoc(membersRef, {
+        uid,
+        role: value,
+        joinedAt: new Date(),
+      });
+
+      onClose();
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "不明なエラーが発生しました";
+      toaster.create({
+        type: "error",
+        description: `参加処理に失敗しました。\n${errorMessage}`,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -56,7 +90,12 @@ export const InitialModal = ({ isOpen, onClose }: Props) => {
             </RadioGroup>
           </DialogBody>
           <DialogFooter>
-            <Button type="submit" colorScheme="blue">
+            <Button
+              type="submit"
+              colorScheme="blue"
+              loading={isLoading}
+              loadingText="参加中"
+            >
               参加する
             </Button>
           </DialogFooter>

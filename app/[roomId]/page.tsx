@@ -11,7 +11,7 @@ type Props = {
 
 export default async function RoomPage({ params }: Props) {
   const { roomId } = await Promise.resolve(params);
-  const roomRef = doc(collection(db, "mitsumori", "room", roomId), "_roomInfo");
+  const roomRef = doc(collection(db, "mitsumori", "room", roomId), "roomInfo");
   const roomDoc = await getDoc(roomRef);
 
   if (!roomDoc.exists()) {
