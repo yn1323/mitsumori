@@ -1,3 +1,4 @@
+import { ClientWrapper } from "@/components/templates/ClientWrapper";
 import { Provider } from "@/components/ui/provider";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import type { Metadata } from "next";
@@ -25,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>
           <Box
@@ -38,7 +39,10 @@ export default function RootLayout({
             zIndex={1}
           >
             <Flex px={4} py={3} maxW="container.xl" mx="auto" align="center">
-              <Link href="/" style={{ textDecoration: "none", display: "block" }}>
+              <Link
+                href="/"
+                style={{ textDecoration: "none", display: "block" }}
+              >
                 <Text
                   fontSize="xl"
                   fontWeight="bold"
@@ -51,6 +55,7 @@ export default function RootLayout({
             </Flex>
           </Box>
           <Box pt={16}>{children}</Box>
+          <ClientWrapper />
         </Provider>
       </body>
     </html>

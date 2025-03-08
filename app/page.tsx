@@ -1,6 +1,5 @@
-
-import { VStack } from "@chakra-ui/react";
 import { CreateRoom } from "@/components/features/CreateRoom";
+import { VStack } from "@chakra-ui/react";
 
 export default function Home() {
   return (

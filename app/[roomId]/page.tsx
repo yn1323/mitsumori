@@ -1,5 +1,5 @@
+import { Room } from "@/components/features/Room";
 import { db } from "@/libs/firebase";
-import { Text, VStack } from "@chakra-ui/react";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { notFound } from "next/navigation";
 
@@ -20,7 +20,7 @@ export default async function RoomPage({ params }: Props) {
 
   const data = roomDoc.data();
   const createdAt = data?.createdAt?.toDate();
-  
+
   if (!createdAt) {
     notFound();
   }
@@ -34,9 +34,5 @@ export default async function RoomPage({ params }: Props) {
     notFound();
   }
 
-  return (
-    <VStack minH="100vh" justify="center" align="center">
-      <Text>ルームID: {roomId}</Text>
-    </VStack>
-  );
+  return <Room roomId={roomId} />;
 }
