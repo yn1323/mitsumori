@@ -43,6 +43,7 @@ export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
         uid,
         role: value,
         isOnline: true,
+        imageType: Math.floor(Math.random() * 10).toString(),
         joinedAt: new Date(),
       });
 
