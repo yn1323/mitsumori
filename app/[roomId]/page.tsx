@@ -1,6 +1,6 @@
 import { Room } from "@/components/features/Room";
-import { db } from "@/libs/firebase";
-import { collection, doc, getDoc } from "firebase/firestore";
+import { getRoomInfoRef } from "@/libs/firebase/dataStructure";
+import { getDoc } from "firebase/firestore";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 
 export default async function RoomPage({ params }: Props) {
   const { roomId } = await Promise.resolve(params);
-  const roomRef = doc(collection(db, "mitsumori", "room", roomId), "roomInfo");
+  const roomRef = getRoomInfoRef(roomId);
   const roomDoc = await getDoc(roomRef);
 
   if (!roomDoc.exists()) {

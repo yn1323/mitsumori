@@ -9,9 +9,10 @@ import {
 import { RadioGroup } from "@/components/ui/radio";
 import { RadioCardItem, RadioCardRoot } from "@/components/ui/radio-card";
 import { toaster } from "@/components/ui/toaster";
-import { auth, db } from "@/libs/firebase";
+import { auth } from "@/libs/firebase";
+import { getMembersInfoRef } from "@/libs/firebase/dataStructure";
 import { Button } from "@chakra-ui/react";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { setDoc } from "firebase/firestore";
 import { useState } from "react";
 
 type Props = {
@@ -37,16 +38,22 @@ export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
         throw new Error("ユーザーが認証されていません");
       }
 
-      const membersRef = doc(
-        collection(db, "mitsumori", "room", roomId, value, uid),
-      );
-      await setDoc(membersRef, {
+      const memberInfoRef = getMembersInfoRef(roomId, uid);
+      await setDoc(memberInfoRef, {
         uid,
         role: value,
+        isOnline: true,
         joinedAt: new Date(),
       });
 
       onClose();
+      toaster.create({
+        type: "success",
+        description:
+          value === "player"
+            ? "プレイヤーとして参加しました"
+            : "観戦者として参加しました",
+      });
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "不明なエラーが発生しました";
