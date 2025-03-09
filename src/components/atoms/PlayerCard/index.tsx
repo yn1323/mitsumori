@@ -54,7 +54,11 @@ export const PlayerCard = ({ status, selectedNumber, diff = false }: Props) => {
           alignItems="center"
           justifyContent="center"
         >
-          <Text fontSize="4xl" fontWeight="bold" color={diff ? "red.500" : "green.500"}>
+          <Text
+            fontSize="4xl"
+            fontWeight="bold"
+            color={diff ? "red.500" : "green.500"}
+          >
             {selectedNumber}
           </Text>
         </Box>

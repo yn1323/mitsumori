@@ -106,7 +106,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
           </Text>
           <Text as="pre" fontSize="sm">
             オンラインメンバー:
-            {/* {JSON.stringify(onlineMembers, null, 2)} */}
+            {JSON.stringify(onlineMembers, null, 2)}
           </Text>
         </VStack>
         <Grid

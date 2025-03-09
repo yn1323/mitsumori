@@ -1,7 +1,7 @@
-"use client";
+import "client-only";
 
 import { db } from "@/libs/firebase";
-import { collection, onSnapshot, query } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export type MemberInfo = {
@@ -14,17 +14,16 @@ export const watchCurrentLoginUsers = (
   roomId: string,
   callback: (members: { [key: string]: MemberInfo }) => void,
 ) => {
-  const membersQuery = query(
-    collection(db, "mitsumori", "room", roomId, "members"),
-  );
+  const membersRef = collection(db, "mitsumori", "room", roomId, "members");
+  const membersQuery = query(membersRef, where("info.isOnline", "==", true));
 
   return onSnapshot(membersQuery, (snapshot) => {
     const onlineMembers: { [key: string]: MemberInfo } = {};
 
     for (const doc of snapshot.docs) {
-      const infoDoc = doc.data();
-      if (infoDoc.info?.isOnline) {
-        onlineMembers[doc.id] = infoDoc.info as MemberInfo;
+      const data = doc.data();
+      if (data.info) {
+        onlineMembers[doc.id] = data.info;
       }
     }
 
@@ -38,15 +37,8 @@ export const useOnlineMembers = (roomId: string) => {
   >({});
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const unsubscribe = watchCurrentLoginUsers(roomId, (members) => {
-        setOnlineMembers(members);
-      });
-
-      return () => {
-        unsubscribe();
-      };
-    }
+    const unsubscribe = watchCurrentLoginUsers(roomId, setOnlineMembers);
+    return () => unsubscribe();
   }, [roomId]);
 
   return onlineMembers;

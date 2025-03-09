@@ -11,11 +11,11 @@ import { RadioCardItem, RadioCardRoot } from "@/components/ui/radio-card";
 import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
 import { getMembersInfoRef } from "@/libs/firebase/dataStructure";
+import { userAtom } from "@/store/user";
 import { Button } from "@chakra-ui/react";
 import { setDoc } from "firebase/firestore";
 import { useSetAtom } from "jotai";
 import { useState } from "react";
-import { userAtom } from "@/store/user";
 
 type Props = {
   isOpen: boolean;
