@@ -1,3 +1,4 @@
+import { CopyUrlButton } from "@/components/features/Header/CopyUrlButton";
 import { ClientWrapper } from "@/components/templates/ClientWrapper";
 import { Provider } from "@/components/ui/provider";
 import { Box, Flex, Text } from "@chakra-ui/react";
@@ -52,6 +53,9 @@ export default function RootLayout({
                   MITSUMORI
                 </Text>
               </Link>
+              <Box ml="auto">
+                <CopyUrlButton />
+              </Box>
             </Flex>
           </Box>
           <Box pt={16}>{children}</Box>
