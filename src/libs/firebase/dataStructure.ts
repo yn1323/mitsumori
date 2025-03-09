@@ -1,17 +1,13 @@
 import { db } from "@/libs/firebase";
-import { collection, doc } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
-const roomCollection = (roomId: string) =>
+export const roomCollection = (roomId: string) =>
   collection(db, "mitsumori", "room", roomId);
 
-const memberCollection = (roomId: string, uid: string) =>
-  collection(roomCollection(roomId), "members", uid);
+export const getRoomInfo = async (roomId: string) => {
+  const roomRef = roomCollection(roomId);
+  const q = query(roomRef, where("type", "==", "roomInfo"));
 
-export const getRoomInfoRef = (roomId: string) =>
-  doc(roomCollection(roomId), "roomInfo");
-
-export const getMembersRef = (roomId: string) =>
-  doc(roomCollection(roomId), "members");
-
-export const getMembersInfoRef = (roomId: string, uid: string) =>
-  doc(memberCollection(roomId, uid), "info");
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs[0];
+};

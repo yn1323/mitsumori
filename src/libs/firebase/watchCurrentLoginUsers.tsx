@@ -2,7 +2,7 @@ import "client-only";
 
 import { db } from "@/libs/firebase";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export type MemberInfo = {
   isOnline: boolean;
@@ -36,10 +36,10 @@ export const useOnlineMembers = (roomId: string) => {
     Record<string, MemberInfo>
   >({});
 
-  useEffect(() => {
-    const unsubscribe = watchCurrentLoginUsers(roomId, setOnlineMembers);
-    return () => unsubscribe();
-  }, [roomId]);
+  // useEffect(() => {
+  //   const unsubscribe = watchCurrentLoginUsers(roomId, setOnlineMembers);
+  //   return () => unsubscribe();
+  // }, [roomId]);
 
   return onlineMembers;
 };

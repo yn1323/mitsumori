@@ -1,6 +1,5 @@
-import { Room } from "@/components/features/Room";
-import { getRoomInfoRef } from "@/libs/firebase/dataStructure";
-import { getDoc } from "firebase/firestore";
+import { getRoomInfo } from "@/libs/firebase/dataStructure";
+import type { Timestamp } from "firebase/firestore";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -9,21 +8,22 @@ type Props = {
   };
 };
 
+type RoomInfo = {
+  type: "roomInfo";
+  createdAt: Timestamp;
+};
+
 export default async function RoomPage({ params }: Props) {
   const { roomId } = await Promise.resolve(params);
-  const roomRef = getRoomInfoRef(roomId);
-  const roomDoc = await getDoc(roomRef);
+  const roomDoc = await getRoomInfo(roomId);
 
-  if (!roomDoc.exists()) {
+  if (!roomDoc || !roomDoc.exists()) {
     notFound();
   }
 
-  const data = roomDoc.data();
-  const createdAt = data?.createdAt?.toDate();
+  const data = roomDoc.data() as RoomInfo;
 
-  if (!createdAt) {
-    notFound();
-  }
+  const createdAt = data.createdAt.toDate();
 
   // 1ヶ月前の日付を計算
   const oneMonthAgo = new Date();
@@ -34,5 +34,5 @@ export default async function RoomPage({ params }: Props) {
     notFound();
   }
 
-  return <Room roomId={roomId} />;
+  return <div roomId={roomId} />;
 }

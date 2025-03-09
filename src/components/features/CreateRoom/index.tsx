@@ -1,9 +1,9 @@
 "use client";
 
 import { toaster } from "@/components/ui/toaster";
-import { getMembersRef, getRoomInfoRef } from "@/libs/firebase/dataStructure";
+import { roomCollection } from "@/libs/firebase/dataStructure";
 import { Box, Button, VStack } from "@chakra-ui/react";
-import { setDoc } from "firebase/firestore";
+import { addDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -17,13 +17,10 @@ export const CreateRoom = () => {
 
     try {
       const newRoomId = uuidv4();
-      const roomRef = getRoomInfoRef(newRoomId);
-      await setDoc(roomRef, {
-        createdAt: new Date(),
-      });
-
-      const member = getMembersRef(newRoomId);
-      await setDoc(member, {
+      const roomRef = roomCollection(newRoomId);
+      await addDoc(roomRef, {
+        type: "roomInfo",
+        roomId: newRoomId,
         createdAt: new Date(),
       });
 
