@@ -13,7 +13,9 @@ import { auth } from "@/libs/firebase";
 import { getMembersInfoRef } from "@/libs/firebase/dataStructure";
 import { Button } from "@chakra-ui/react";
 import { setDoc } from "firebase/firestore";
+import { useSetAtom } from "jotai";
 import { useState } from "react";
+import { userAtom } from "@/store/user";
 
 type Props = {
   isOpen: boolean;
@@ -23,6 +25,7 @@ type Props = {
 
 export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
+  const setUser = useSetAtom(userAtom);
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,14 +42,21 @@ export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
       }
 
       const memberInfoRef = getMembersInfoRef(roomId, uid);
+      const imageType = Math.floor(Math.random() * 10).toString();
       await setDoc(memberInfoRef, {
         uid,
         role: value,
         isOnline: true,
-        imageType: Math.floor(Math.random() * 10).toString(),
+        imageType,
         joinedAt: new Date(),
       });
 
+      setUser({
+        uid,
+        role: value,
+        imageType,
+        isOnline: true,
+      });
       onClose();
       toaster.create({
         type: "success",

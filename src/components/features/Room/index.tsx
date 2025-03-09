@@ -1,11 +1,21 @@
 "use client";
 
+import { useAtom } from "jotai";
 import { PlayerCard } from "@/components/atoms/PlayerCard";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
 import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
 import { getMembersInfoRef } from "@/libs/firebase/dataStructure";
-import { Box, Grid, Text, VStack, useDisclosure } from "@chakra-ui/react";
+import { userAtom } from "@/store/user";
+import {
+  Box,
+  Button,
+  Grid,
+  HStack,
+  Text,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { signInAnonymously, signOut } from "firebase/auth";
 import { updateDoc } from "firebase/firestore";
 import type { ReactNode } from "react";
@@ -20,7 +30,8 @@ const POKER_NUMBERS = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55] as const;
 
 export const Room = ({ roomId }: Props): ReactNode => {
   const [isLoading, setIsLoading] = useState(true);
-  const { open: isOpen, onClose } = useDisclosure({ defaultOpen: false });
+  const { open: isOpen, onClose } = useDisclosure({ defaultOpen: true });
+  const [user, setUser] = useAtom(userAtom);
 
   const signIn = useCallback(async () => {
     try {
@@ -47,6 +58,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
         isOnline: false,
       });
       await signOut(auth);
+      setUser(null);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "不明なエラーが発生しました";
@@ -55,7 +67,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
         description: `ログアウトに失敗しました。\n${errorMessage}`,
       });
     }
-  }, [roomId]);
+  }, [roomId, setUser]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -85,21 +97,25 @@ export const Room = ({ roomId }: Props): ReactNode => {
 
   return (
     <VStack minH="100vh" justify="center" align="center" gap={8} p={4}>
-      <Text>ルームID: {roomId}</Text>
-      <Grid
-        templateColumns={{
-          base: "repeat(2, 1fr)",
-          sm: "repeat(5, 1fr)",
-          md: "repeat(10, 1fr)",
-        }}
-        gap={4}
-        w="full"
-        maxW="1600px"
-      >
-        {POKER_NUMBERS.map((number) => (
-          <SelectableCard key={number} number={number} />
-        ))}
-      </Grid>
+      <VStack w="full" maxW="1600px" gap={4}>
+        <Text as="pre" fontSize="sm" alignSelf="start">
+          {JSON.stringify(user, null, 2)}
+        </Text>
+        <Grid
+          templateColumns={{
+            base: "repeat(2, 1fr)",
+            sm: "repeat(5, 1fr)",
+            md: "repeat(10, 1fr)",
+          }}
+          gap={4}
+          w="full"
+          maxW="1600px"
+        >
+          {POKER_NUMBERS.map((number) => (
+            <SelectableCard key={number} number={number} />
+          ))}
+        </Grid>
+      </VStack>
       <Box w="full" maxW="1600px">
         <Grid templateColumns="repeat(3, 1fr)" gap={4} w="full">
           <PlayerCard status="unselected" />
@@ -107,6 +123,11 @@ export const Room = ({ roomId }: Props): ReactNode => {
           <PlayerCard status="opened" selectedNumber={8} diff={true} />
         </Grid>
       </Box>
+
+      <HStack gap={4}>
+        <Button colorScheme="blue">リセット</Button>
+        <Button colorScheme="green">開票</Button>
+      </HStack>
       <InitialModal isOpen={isOpen} onClose={onClose} roomId={roomId} />
     </VStack>
   );
