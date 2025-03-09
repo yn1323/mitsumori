@@ -1,11 +1,11 @@
 "use client";
 
-import { useAtom } from "jotai";
 import { PlayerCard } from "@/components/atoms/PlayerCard";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
 import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
 import { getMembersInfoRef } from "@/libs/firebase/dataStructure";
+import { useOnlineMembers } from "@/libs/firebase/watchCurrentLoginUsers";
 import { userAtom } from "@/store/user";
 import {
   Box,
@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { signInAnonymously, signOut } from "firebase/auth";
 import { updateDoc } from "firebase/firestore";
+import { useAtom } from "jotai";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { InitialModal } from "./InitialModal";
@@ -32,6 +33,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
   const [isLoading, setIsLoading] = useState(true);
   const { open: isOpen, onClose } = useDisclosure({ defaultOpen: true });
   const [user, setUser] = useAtom(userAtom);
+  const onlineMembers = useOnlineMembers(roomId);
 
   const signIn = useCallback(async () => {
     try {
@@ -98,9 +100,15 @@ export const Room = ({ roomId }: Props): ReactNode => {
   return (
     <VStack minH="100vh" justify="center" align="center" gap={8} p={4}>
       <VStack w="full" maxW="1600px" gap={4}>
-        <Text as="pre" fontSize="sm" alignSelf="start">
-          {JSON.stringify(user, null, 2)}
-        </Text>
+        <VStack align="start" w="full" gap={2}>
+          <Text as="pre" fontSize="sm">
+            {JSON.stringify(user, null, 2)}
+          </Text>
+          <Text as="pre" fontSize="sm">
+            オンラインメンバー:
+            {/* {JSON.stringify(onlineMembers, null, 2)} */}
+          </Text>
+        </VStack>
         <Grid
           templateColumns={{
             base: "repeat(2, 1fr)",
