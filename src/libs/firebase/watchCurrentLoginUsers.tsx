@@ -38,13 +38,15 @@ export const useOnlineMembers = (roomId: string) => {
   >({});
 
   useEffect(() => {
-    const unsubscribe = watchCurrentLoginUsers(roomId, (members) => {
-      setOnlineMembers(members);
-    });
+    if (typeof window !== "undefined") {
+      const unsubscribe = watchCurrentLoginUsers(roomId, (members) => {
+        setOnlineMembers(members);
+      });
 
-    return () => {
-      unsubscribe();
-    };
+      return () => {
+        unsubscribe();
+      };
+    }
   }, [roomId]);
 
   return onlineMembers;
