@@ -7,7 +7,10 @@ import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
 import { gerRoomCollectionDoc } from "@/libs/firebase/dataStructure";
 import { setCardsClose, setCardsOpen } from "@/libs/firebase/setOpenResult";
-import { setStoryPoint } from "@/libs/firebase/setStoryPoint";
+import {
+  resetAllUserStoryPoints,
+  setStoryPoint,
+} from "@/libs/firebase/setStoryPoint";
 import { useWatchOnlineMembers } from "@/libs/firebase/watchCurrentLoginUsers";
 import { useWatchRoom } from "@/libs/firebase/watchRoom";
 import { defaultUserAtom, userAtom } from "@/store/user";
@@ -31,7 +34,7 @@ type Props = {
   roomId: string;
 };
 
-const POKER_NUMBERS = [-1, 0, 1, 2, 3, 5, 8, 13, 21, 34, 55] as const;
+const POKER_NUMBERS = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55] as const;
 
 export const Room = ({ roomId }: Props): ReactNode => {
   const [isLoading, setIsLoading] = useState(true);
@@ -153,6 +156,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
                 setSelectedCardUid(uid);
                 handleForceLogoutOpen();
               }}
+              onClickSelected={() => setStoryPoint(roomId, uid, -1)}
             />
           ))}
           <PlayerCard
@@ -171,7 +175,10 @@ export const Room = ({ roomId }: Props): ReactNode => {
       <HStack gap={4}>
         <Button
           colorScheme="blue"
-          onClick={async () => await setCardsClose(roomId)}
+          onClick={async () => {
+            await setCardsClose(roomId);
+            await resetAllUserStoryPoints(roomId);
+          }}
         >
           リセット
         </Button>
