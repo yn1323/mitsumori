@@ -6,7 +6,7 @@ import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
 import { gerRoomCollectionDoc } from "@/libs/firebase/dataStructure";
 import { useOnlineMembers } from "@/libs/firebase/watchCurrentLoginUsers";
-import { userAtom } from "@/store/user";
+import { defaultUserAtom, userAtom } from "@/store/user";
 import {
   Box,
   Button,
@@ -60,7 +60,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
         isOnline: false,
       });
       await signOut(auth);
-      setUser(null);
+      setUser(defaultUserAtom);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "不明なエラーが発生しました";
