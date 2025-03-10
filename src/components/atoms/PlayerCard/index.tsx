@@ -136,11 +136,11 @@ export const PlayerCard = ({
           },
           content: (
             <Text
-              fontSize="4xl"
+              fontSize={selectedNumber === -1 ? "xl" : "4xl"}
               fontWeight="bold"
               color={diff ? "red.500" : "green.500"}
             >
-              {selectedNumber}
+              {selectedNumber === -1 ? "未選択" : selectedNumber}
             </Text>
           ),
         };

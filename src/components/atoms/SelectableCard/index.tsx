@@ -4,10 +4,11 @@ import { Box, Text } from "@chakra-ui/react";
 
 type Props = {
   number: number;
+  isCardsOpen: boolean;
   onClick?: () => void;
 };
 
-export const SelectableCard = ({ number, onClick }: Props) => {
+export const SelectableCard = ({ number, isCardsOpen, onClick }: Props) => {
   return (
     <Box
       bg="white"
@@ -21,14 +22,18 @@ export const SelectableCard = ({ number, onClick }: Props) => {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      cursor="pointer"
+      cursor={isCardsOpen ? undefined : "pointer"}
       transition="transform 0.2s"
-      onClick={onClick}
-      _hover={{
-        transform: "translateY(-4px)",
-        boxShadow: "xl",
-        bg: "gray.50",
-      }}
+      onClick={isCardsOpen ? undefined : onClick}
+      _hover={
+        isCardsOpen
+          ? undefined
+          : {
+              transform: "translateY(-4px)",
+              boxShadow: "xl",
+              bg: "gray.50",
+            }
+      }
     >
       <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold">
         {number}

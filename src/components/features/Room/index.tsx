@@ -1,6 +1,7 @@
 "use client";
 
 import { PlayerCard } from "@/components/atoms/PlayerCard";
+import { Result } from "@/components/atoms/Result";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
 import { ForceLogoutModal } from "@/components/features/Room/ForceLogoutModal";
 import { toaster } from "@/components/ui/toaster";
@@ -106,79 +107,124 @@ export const Room = ({ roomId }: Props): ReactNode => {
 
   if (isLoading) {
     return (
-      <VStack minH="100vh" justify="center" align="center">
+      <VStack minH="calc(100vh - 64px)">
         <Text>ローディング中...</Text>
       </VStack>
     );
   }
 
   return (
-    <VStack minH="100vh" justify="center" align="center" gap={8} p={4}>
-      <VStack w="full" maxW="1600px" gap={4}>
-        <VStack align="start" w="full" gap={2}>
-          <Text as="pre" fontSize="sm">
-            {JSON.stringify(user, null, 2)}
+    <VStack minH="calc(100vh - 64px)" gap={8} p={4}>
+      <Box w="full" maxW="1600px" minH="200px" bg="blue.50" p={4} rounded="lg">
+        <VStack w="full" gap={4}>
+          <Text fontSize="lg" fontWeight="bold">
+            ポーカー番号を選択
           </Text>
-          <Text as="pre" fontSize="sm">
-            オンラインメンバー:
-            {JSON.stringify(players, null, 2)}
-          </Text>
+          <Grid
+            templateColumns={{
+              base: "repeat(3, 1fr)",
+              sm: "repeat(5, 1fr)",
+              md: "repeat(8, 1fr)",
+              lg: "repeat(10, 1fr)",
+            }}
+            gap={4}
+            w="full"
+          >
+            {POKER_NUMBERS.map((number) => (
+              <Box key={number} minH="60px">
+                <SelectableCard
+                  number={number}
+                  isCardsOpen={isCardsOpen}
+                  onClick={() => setStoryPoint(roomId, userId, number)}
+                />
+              </Box>
+            ))}
+          </Grid>
         </VStack>
-        <Grid
-          templateColumns={{
-            base: "repeat(2, 1fr)",
-            sm: "repeat(5, 1fr)",
-            md: "repeat(10, 1fr)",
-          }}
-          gap={4}
-          w="full"
-          maxW="1600px"
-        >
-          {POKER_NUMBERS.map((number) => (
-            <SelectableCard
-              key={number}
-              number={number}
-              onClick={() => setStoryPoint(roomId, userId, number)}
-            />
-          ))}
-        </Grid>
-      </VStack>
-      <Box w="full" maxW="1600px">
-        <Grid templateColumns="repeat(3, 1fr)" gap={4} w="full">
-          {players.map(({ uid, point }) => (
-            <PlayerCard
-              key={uid}
-              uid={uid}
-              selectedNumber={point}
-              status={getCardStatus(point, isCardsOpen)}
-              onClickUnselected={() => {
-                setSelectedCardUid(uid);
-                handleForceLogoutOpen();
-              }}
-              onClickSelected={() => setStoryPoint(roomId, uid, -1)}
-              diff={overDiffUserUIds.includes(uid)}
-            />
-          ))}
-        </Grid>
       </Box>
 
-      <HStack gap={4}>
-        <Button
-          colorScheme="blue"
-          onClick={async () => {
-            await setCardsClose(roomId);
-            await resetAllUserStoryPoints(roomId);
-          }}
-        >
-          リセット
-        </Button>
-        <Button
-          colorScheme="green"
-          onClick={async () => await setCardsOpen(roomId)}
-        >
-          開票
-        </Button>
-      </HStack>
+      <Box w="full" maxW="1600px" minH="300px" bg="gray.50" p={4} rounded="lg">
+        {players.length === 0 ? (
+          <VStack justify="center" h="300px">
+            <Text fontSize="lg" color="gray.600">
+              プレイヤーを募集中です...
+            </Text>
+            <Text fontSize="sm" color="gray.500">
+              他のプレイヤーの参加をお待ちください
+            </Text>
+          </VStack>
+        ) : (
+          <Grid
+            templateColumns={{
+              base: "repeat(2, 1fr)",
+              sm: "repeat(3, 1fr)",
+              md: "repeat(4, 1fr)",
+              lg: "repeat(5, 1fr)",
+            }}
+            gap={4}
+            w="full"
+          >
+            {players.map(({ uid, point }) => (
+              <Box key={uid} minH="120px">
+                <PlayerCard
+                  uid={uid}
+                  selectedNumber={point}
+                  status={getCardStatus(point, isCardsOpen)}
+                  onClickUnselected={() => {
+                    setSelectedCardUid(uid);
+                    handleForceLogoutOpen();
+                  }}
+                  onClickSelected={() => setStoryPoint(roomId, uid, -1)}
+                  diff={overDiffUserUIds.includes(uid)}
+                />
+              </Box>
+            ))}
+          </Grid>
+        )}
+      </Box>
+
+      <Box w="full" maxW="1600px" bg="green.50" p={4} rounded="lg">
+        <VStack gap={6} w="full">
+          <Box>
+            <Text fontSize="lg" fontWeight="bold" mb={4} textAlign="center">
+              投票結果
+            </Text>
+            <HStack gap={4} justify="center" w="full">
+              <Button
+                colorScheme="blue"
+                onClick={async () => {
+                  await setCardsClose(roomId);
+                  await resetAllUserStoryPoints(roomId);
+                }}
+              >
+                リセット
+              </Button>
+              <Button
+                colorScheme="green"
+                onClick={async () => await setCardsOpen(roomId)}
+              >
+                開票
+              </Button>
+            </HStack>
+          </Box>
+          {isCardsOpen ? (
+            <Box py={2}>
+              <Result
+                points={players
+                  .filter((player) => player.point !== -1)
+                  .map((player) => player.point)}
+              />
+            </Box>
+          ) : (
+            <Box py={4}>
+              <Text color="gray.500" fontSize="sm" textAlign="center">
+                開票ボタンをクリックすると、投票結果が表示されます
+              </Text>
+            </Box>
+          )}
+        </VStack>
+      </Box>
+
       <InitialModal
         isOpen={initialLoginOpen}
         onClose={handleIInitialLoginClose}
