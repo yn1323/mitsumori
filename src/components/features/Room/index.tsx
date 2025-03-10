@@ -135,7 +135,16 @@ export const Room = ({ roomId }: Props): ReactNode => {
                 <SelectableCard
                   number={number}
                   isCardsOpen={isCardsOpen}
-                  onClick={() => setStoryPoint(roomId, userId, number)}
+                  onClick={() => {
+                    if (user.role !== "player") {
+                      toaster.create({
+                        type: "error",
+                        description: "プレイヤー以外は選択できません",
+                      });
+                      return;
+                    }
+                    setStoryPoint(roomId, userId, number);
+                  }}
                 />
               </Box>
             ))}
@@ -171,6 +180,14 @@ export const Room = ({ roomId }: Props): ReactNode => {
                   selectedNumber={point}
                   status={getCardStatus(point, isCardsOpen)}
                   onClickUnselected={() => {
+                    if (user.role !== "player") {
+                      toaster.create({
+                        type: "error",
+                        description:
+                          "プレイヤー以外は強制ログアウトさせることはできません",
+                      });
+                      return;
+                    }
                     setSelectedCardUid(uid);
                     handleForceLogoutOpen();
                   }}
@@ -191,19 +208,35 @@ export const Room = ({ roomId }: Props): ReactNode => {
             </Text>
             <HStack gap={4} justify="center" w="full">
               <Button
+                colorScheme="green"
+                onClick={async () => {
+                  if (user.role !== "player") {
+                    toaster.create({
+                      type: "error",
+                      description: "プレイヤー以外は開票できません",
+                    });
+                    return;
+                  }
+                  await setCardsOpen(roomId);
+                }}
+              >
+                開票
+              </Button>
+              <Button
                 colorScheme="blue"
                 onClick={async () => {
+                  if (user.role !== "player") {
+                    toaster.create({
+                      type: "error",
+                      description: "プレイヤー以外はリセットできません",
+                    });
+                    return;
+                  }
                   await setCardsClose(roomId);
                   await resetAllUserStoryPoints(roomId);
                 }}
               >
                 リセット
-              </Button>
-              <Button
-                colorScheme="green"
-                onClick={async () => await setCardsOpen(roomId)}
-              >
-                開票
               </Button>
             </HStack>
           </Box>
