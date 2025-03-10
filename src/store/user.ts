@@ -6,6 +6,7 @@ export const defaultUserAtom: UserDocType = {
   uid: "",
   role: "player",
   imageType: "0",
+  point: -1,
   isOnline: false,
   joinedAt: new Date(),
 };

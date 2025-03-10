@@ -12,12 +12,14 @@ export type RoomDocType = {
   createdAt: Timestamp | Date;
   roomId: string;
   type: "roomInfo";
+  isCardsOpen: boolean;
 };
 
 export type UserDocType = {
   type: "userInfo";
   imageType: string;
   isOnline: boolean;
+  point: number;
   joinedAt: Timestamp | Date;
   role: "player" | "spectator";
   uid: string;

@@ -6,7 +6,10 @@ import { ForceLogoutModal } from "@/components/features/Room/ForceLogoutModal";
 import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
 import { gerRoomCollectionDoc } from "@/libs/firebase/dataStructure";
-import { useOnlineMembers } from "@/libs/firebase/watchCurrentLoginUsers";
+import { setCardsClose, setCardsOpen } from "@/libs/firebase/setOpenResult";
+import { setStoryPoint } from "@/libs/firebase/setStoryPoint";
+import { useWatchOnlineMembers } from "@/libs/firebase/watchCurrentLoginUsers";
+import { useWatchRoom } from "@/libs/firebase/watchRoom";
 import { defaultUserAtom, userAtom } from "@/store/user";
 import {
   Box,
@@ -28,7 +31,7 @@ type Props = {
   roomId: string;
 };
 
-const POKER_NUMBERS = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55] as const;
+const POKER_NUMBERS = [-1, 0, 1, 2, 3, 5, 8, 13, 21, 34, 55] as const;
 
 export const Room = ({ roomId }: Props): ReactNode => {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +44,10 @@ export const Room = ({ roomId }: Props): ReactNode => {
   } = useDisclosure({ defaultOpen: false });
   const [selectedCardUid, setSelectedCardUid] = useState("");
   const [user, setUser] = useAtom(userAtom);
-  const { players } = useOnlineMembers(roomId);
+  const { players } = useWatchOnlineMembers(roomId);
+  const { isCardsOpen } = useWatchRoom(roomId);
+
+  const userId = auth.currentUser?.uid ?? "";
 
   const signIn = useCallback(async () => {
     try {
@@ -59,7 +65,6 @@ export const Room = ({ roomId }: Props): ReactNode => {
   }, []);
 
   const handleLogout = useCallback(async () => {
-    const userId = auth.currentUser?.uid;
     if (!userId) return;
 
     try {
@@ -77,7 +82,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
         description: `ログアウトに失敗しました。\n${errorMessage}`,
       });
     }
-  }, [roomId, setUser]);
+  }, [roomId, setUser, userId]);
 
   useEffect(() => {
     const cleanup = async () => {
@@ -128,17 +133,22 @@ export const Room = ({ roomId }: Props): ReactNode => {
           maxW="1600px"
         >
           {POKER_NUMBERS.map((number) => (
-            <SelectableCard key={number} number={number} />
+            <SelectableCard
+              key={number}
+              number={number}
+              onClick={() => setStoryPoint(roomId, userId, number)}
+            />
           ))}
         </Grid>
       </VStack>
       <Box w="full" maxW="1600px">
         <Grid templateColumns="repeat(3, 1fr)" gap={4} w="full">
-          {players.map(({ uid }) => (
+          {players.map(({ uid, point }) => (
             <PlayerCard
               key={uid}
               uid={uid}
-              status="unselected"
+              selectedNumber={point}
+              status={getCardStatus(point, isCardsOpen)}
               onClickUnselected={() => {
                 setSelectedCardUid(uid);
                 handleForceLogoutOpen();
@@ -159,8 +169,18 @@ export const Room = ({ roomId }: Props): ReactNode => {
       </Box>
 
       <HStack gap={4}>
-        <Button colorScheme="blue">リセット</Button>
-        <Button colorScheme="green">開票</Button>
+        <Button
+          colorScheme="blue"
+          onClick={async () => await setCardsClose(roomId)}
+        >
+          リセット
+        </Button>
+        <Button
+          colorScheme="green"
+          onClick={async () => await setCardsOpen(roomId)}
+        >
+          開票
+        </Button>
       </HStack>
       <InitialModal
         isOpen={initialLoginOpen}
@@ -176,3 +196,15 @@ export const Room = ({ roomId }: Props): ReactNode => {
     </VStack>
   );
 };
+
+function getCardStatus(storyPoint: number, isCardsOpen: boolean) {
+  if (isCardsOpen) {
+    return "opened";
+  }
+
+  if (storyPoint === -1) {
+    return "unselected";
+  }
+
+  return "selected";
+}

@@ -14,7 +14,7 @@ import {
   type UserDocType,
   gerRoomCollectionDoc,
 } from "@/libs/firebase/dataStructure";
-import { userAtom } from "@/store/user";
+import { defaultUserAtom, userAtom } from "@/store/user";
 import { Button } from "@chakra-ui/react";
 import { setDoc } from "firebase/firestore";
 import { useSetAtom } from "jotai";
@@ -47,7 +47,7 @@ export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
       const memberInfoRef = gerRoomCollectionDoc(roomId, uid);
       const imageType = Math.floor(Math.random() * 10).toString();
       const doc: UserDocType = {
-        type: "userInfo",
+        ...defaultUserAtom,
         uid,
         role: value,
         isOnline: true,

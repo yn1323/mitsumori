@@ -4,10 +4,12 @@ import {
   type UserDocType,
   roomCollection,
 } from "@/libs/firebase/dataStructure";
+import { userAtom } from "@/store/user";
 import { onSnapshot, query, where } from "firebase/firestore";
+import { useAtom } from "jotai";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 
-export const watchCurrentLoginUsers = (
+export const watchOnlineMembers = (
   roomId: string,
   callback: Dispatch<SetStateAction<UserDocType[]>>,
 ) => {
@@ -23,13 +25,19 @@ export const watchCurrentLoginUsers = (
   });
 };
 
-export const useOnlineMembers = (roomId: string) => {
+export const useWatchOnlineMembers = (roomId: string) => {
   const [onlineMembers, setOnlineMembers] = useState<UserDocType[]>([]);
+  const [user, setUser] = useAtom(userAtom);
 
   useEffect(() => {
-    const unsubscribe = watchCurrentLoginUsers(roomId, setOnlineMembers);
+    const unsubscribe = watchOnlineMembers(roomId, setOnlineMembers);
     return () => unsubscribe();
   }, [roomId]);
+
+  useEffect(() => {
+    const selfInfo = onlineMembers.find(({ uid }) => uid === user.uid);
+    selfInfo && setUser(selfInfo);
+  }, [onlineMembers, user.uid, setUser]);
 
   return {
     all: onlineMembers,
