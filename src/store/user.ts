@@ -1,10 +1,11 @@
+import type { UserDocType } from "@/libs/firebase/dataStructure";
 import { atom } from "jotai";
 
-type UserState = {
-  uid: string;
-  role: "player" | "spectator";
-  imageType: string;
-  isOnline: boolean;
-} | null;
-
-export const userAtom = atom<UserState>(null);
+export const userAtom = atom<UserDocType>({
+  type: "userInfo",
+  uid: "",
+  role: "player",
+  imageType: "0",
+  isOnline: false,
+  joinedAt: new Date(),
+});

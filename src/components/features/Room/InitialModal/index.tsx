@@ -10,7 +10,10 @@ import { RadioGroup } from "@/components/ui/radio";
 import { RadioCardItem, RadioCardRoot } from "@/components/ui/radio-card";
 import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
-import { getMembersInfoRef } from "@/libs/firebase/dataStructure";
+import {
+  type UserDocType,
+  gerRoomCollectionDoc,
+} from "@/libs/firebase/dataStructure";
 import { userAtom } from "@/store/user";
 import { Button } from "@chakra-ui/react";
 import { setDoc } from "firebase/firestore";
@@ -41,22 +44,19 @@ export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
         throw new Error("ユーザーが認証されていません");
       }
 
-      const memberInfoRef = getMembersInfoRef(roomId, uid);
+      const memberInfoRef = gerRoomCollectionDoc(roomId, uid);
       const imageType = Math.floor(Math.random() * 10).toString();
-      await setDoc(memberInfoRef, {
+      const doc: UserDocType = {
+        type: "userInfo",
         uid,
         role: value,
         isOnline: true,
         imageType,
         joinedAt: new Date(),
-      });
+      };
+      await setDoc(memberInfoRef, doc);
+      setUser(doc);
 
-      setUser({
-        uid,
-        role: value,
-        imageType,
-        isOnline: true,
-      });
       onClose();
       toaster.create({
         type: "success",

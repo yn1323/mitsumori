@@ -4,7 +4,7 @@ import { PlayerCard } from "@/components/atoms/PlayerCard";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
 import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
-import { getMembersInfoRef } from "@/libs/firebase/dataStructure";
+import { gerRoomCollectionDoc } from "@/libs/firebase/dataStructure";
 import { useOnlineMembers } from "@/libs/firebase/watchCurrentLoginUsers";
 import { userAtom } from "@/store/user";
 import {
@@ -55,8 +55,8 @@ export const Room = ({ roomId }: Props): ReactNode => {
     if (!userId) return;
 
     try {
-      const memberInfoRef = getMembersInfoRef(roomId, userId);
-      await updateDoc(memberInfoRef, {
+      const userInfoRef = gerRoomCollectionDoc(roomId, userId);
+      await updateDoc(userInfoRef, {
         isOnline: false,
       });
       await signOut(auth);
