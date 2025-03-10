@@ -126,9 +126,9 @@ export const Room = ({ roomId }: Props): ReactNode => {
       </VStack>
       <Box w="full" maxW="1600px">
         <Grid templateColumns="repeat(3, 1fr)" gap={4} w="full">
-          <PlayerCard status="unselected" />
-          <PlayerCard status="selected" />
-          <PlayerCard status="opened" selectedNumber={8} diff={true} />
+          <PlayerCard uid="1" status="unselected" />
+          <PlayerCard uid="2" status="selected" />
+          <PlayerCard uid="3" status="opened" selectedNumber={8} diff={true} />
         </Grid>
       </Box>
 

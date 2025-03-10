@@ -22,8 +22,6 @@ export default async function RoomPage({ params }: Props) {
     notFound();
   }
 
-  console.log(roomData);
-
   const createdAt =
     "toDate" in roomData.createdAt
       ? roomData.createdAt.toDate()
