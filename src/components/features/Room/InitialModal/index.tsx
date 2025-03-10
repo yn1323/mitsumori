@@ -38,10 +38,20 @@ export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
     try {
       const formData = new FormData(e.currentTarget);
       const value = formData.get("role") as "player" | "spectator";
+
       const uid = auth.currentUser?.uid;
 
       if (!uid) {
         throw new Error("ユーザーが認証されていません");
+      }
+
+      if (!["player", "spectator"].includes(value)) {
+        toaster.create({
+          type: "error",
+          description: "参加方式を選んでください",
+        });
+        setIsLoading(false);
+        return;
       }
 
       const memberInfoRef = gerRoomCollectionDoc(roomId, uid);

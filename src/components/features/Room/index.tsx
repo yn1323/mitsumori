@@ -165,10 +165,10 @@ export const Room = ({ roomId }: Props): ReactNode => {
         ) : (
           <Grid
             templateColumns={{
-              base: "repeat(2, 1fr)",
-              sm: "repeat(3, 1fr)",
-              md: "repeat(4, 1fr)",
-              lg: "repeat(5, 1fr)",
+              base: "repeat(4, 1fr)",
+              sm: "repeat(6, 1fr)",
+              md: "repeat(8, 1fr)",
+              lg: "repeat(10, 1fr)",
             }}
             gap={4}
             w="full"
@@ -241,7 +241,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
             </HStack>
           </Box>
           {isCardsOpen ? (
-            <Box py={2}>
+            <Box py={2} minH="130px">
               <Result
                 points={players
                   .filter((player) => player.point !== -1)
@@ -249,7 +249,13 @@ export const Room = ({ roomId }: Props): ReactNode => {
               />
             </Box>
           ) : (
-            <Box py={4}>
+            <Box
+              py={4}
+              minH="130px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
               <Text color="gray.500" fontSize="sm" textAlign="center">
                 開票ボタンをクリックすると、投票結果が表示されます
               </Text>
