@@ -2,6 +2,7 @@
 
 import { PlayerCard } from "@/components/atoms/PlayerCard";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
+import { ForceLogoutModal } from "@/components/features/Room/ForceLogoutModal";
 import { toaster } from "@/components/ui/toaster";
 import { auth } from "@/libs/firebase";
 import { gerRoomCollectionDoc } from "@/libs/firebase/dataStructure";
@@ -31,9 +32,16 @@ const POKER_NUMBERS = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55] as const;
 
 export const Room = ({ roomId }: Props): ReactNode => {
   const [isLoading, setIsLoading] = useState(true);
-  const { open: isOpen, onClose } = useDisclosure({ defaultOpen: true });
+  const { open: initialLoginOpen, onClose: handleIInitialLoginClose } =
+    useDisclosure({ defaultOpen: true });
+  const {
+    open: forceLogoutOpen,
+    onOpen: handleForceLogoutOpen,
+    onClose: handleForceLogoutClose,
+  } = useDisclosure({ defaultOpen: false });
+  const [selectedCardUid, setSelectedCardUid] = useState("");
   const [user, setUser] = useAtom(userAtom);
-  const onlineMembers = useOnlineMembers(roomId);
+  const { players } = useOnlineMembers(roomId);
 
   const signIn = useCallback(async () => {
     try {
@@ -106,7 +114,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
           </Text>
           <Text as="pre" fontSize="sm">
             オンラインメンバー:
-            {JSON.stringify(onlineMembers, null, 2)}
+            {JSON.stringify(players, null, 2)}
           </Text>
         </VStack>
         <Grid
@@ -126,7 +134,25 @@ export const Room = ({ roomId }: Props): ReactNode => {
       </VStack>
       <Box w="full" maxW="1600px">
         <Grid templateColumns="repeat(3, 1fr)" gap={4} w="full">
-          <PlayerCard uid="1" status="unselected" />
+          {players.map(({ uid }) => (
+            <PlayerCard
+              key={uid}
+              uid={uid}
+              status="unselected"
+              onClickUnselected={() => {
+                setSelectedCardUid(uid);
+                handleForceLogoutOpen();
+              }}
+            />
+          ))}
+          <PlayerCard
+            uid="1"
+            status="unselected"
+            onClickUnselected={() => {
+              setSelectedCardUid("aaa");
+              handleForceLogoutOpen();
+            }}
+          />
           <PlayerCard uid="2" status="selected" />
           <PlayerCard uid="3" status="opened" selectedNumber={8} diff={true} />
         </Grid>
@@ -136,7 +162,17 @@ export const Room = ({ roomId }: Props): ReactNode => {
         <Button colorScheme="blue">リセット</Button>
         <Button colorScheme="green">開票</Button>
       </HStack>
-      <InitialModal isOpen={isOpen} onClose={onClose} roomId={roomId} />
+      <InitialModal
+        isOpen={initialLoginOpen}
+        onClose={handleIInitialLoginClose}
+        roomId={roomId}
+      />
+      <ForceLogoutModal
+        isOpen={forceLogoutOpen}
+        onClose={handleForceLogoutClose}
+        roomId={roomId}
+        uid={selectedCardUid}
+      />
     </VStack>
   );
 };

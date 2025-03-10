@@ -32,11 +32,42 @@ export const PlayerCard = ({
 
   switch (status) {
     case "unselected":
-      return <Box {...baseProps} borderColor="gray.200" boxShadow="sm" />;
+      return (
+        <Box
+          {...baseProps}
+          borderColor="gray.200"
+          boxShadow="sm"
+          cursor="pointer"
+          onClick={onClickUnselected}
+          position="relative"
+          transition="all 0.2s"
+          _hover={{
+            transform: "translateY(-2px)",
+            boxShadow: "md",
+            bg: "gray.50",
+            borderColor: "gray.300",
+          }}
+          _active={{
+            transform: "translateY(0)",
+          }}
+        >
+          <Box
+            position="absolute"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
+          >
+            <Text color="gray.400" fontSize="sm" fontWeight="bold">
+              考え中...
+            </Text>
+          </Box>
+        </Box>
+      );
     case "selected":
       return (
         <Box
           {...baseProps}
+          onClick={onClickSelected}
           bg="blue.500"
           borderColor="blue.400"
           boxShadow="lg"

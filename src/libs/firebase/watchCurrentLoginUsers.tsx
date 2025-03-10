@@ -31,5 +31,9 @@ export const useOnlineMembers = (roomId: string) => {
     return () => unsubscribe();
   }, [roomId]);
 
-  return onlineMembers;
+  return {
+    all: onlineMembers,
+    players: onlineMembers.filter(({ role }) => role === "player"),
+    spectators: onlineMembers.filter(({ role }) => role === "spectator"),
+  };
 };
