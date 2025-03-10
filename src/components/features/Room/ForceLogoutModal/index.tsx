@@ -34,7 +34,7 @@ export const ForceLogoutModal = ({ isOpen, onClose, roomId, uid }: Props) => {
         });
         toaster.create({
           type: "success",
-          description: "矯正ログアウトに成功しました",
+          description: "強制ログアウトに成功しました",
         });
         onClose();
       } catch (error) {
@@ -42,7 +42,7 @@ export const ForceLogoutModal = ({ isOpen, onClose, roomId, uid }: Props) => {
           error instanceof Error ? error.message : "不明なエラーが発生しました";
         toaster.create({
           type: "error",
-          description: `矯正ログアウトに失敗しました。\n${errorMessage}`,
+          description: `強制ログアウトに失敗しました。\n${errorMessage}`,
         });
       } finally {
         setIsLoading(false);
