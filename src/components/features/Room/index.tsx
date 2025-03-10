@@ -118,7 +118,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
       <Box w="full" maxW="1600px" minH="200px" bg="blue.50" p={4} rounded="lg">
         <VStack w="full" gap={4}>
           <Text fontSize="lg" fontWeight="bold">
-            ポーカー番号を選択
+            ポイントを選択してください
           </Text>
           <Grid
             templateColumns={{
