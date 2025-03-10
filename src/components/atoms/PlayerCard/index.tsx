@@ -132,6 +132,7 @@ export const PlayerCard = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            transition: "all 0.2s",
           },
           content: (
             <Text
