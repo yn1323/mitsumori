@@ -7,7 +7,13 @@ import {
 import { userAtom } from "@/store/user";
 import { onSnapshot, query, where } from "firebase/firestore";
 import { useAtom } from "jotai";
-import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 export const watchOnlineMembers = (
   roomId: string,
@@ -39,9 +45,27 @@ export const useWatchOnlineMembers = (roomId: string) => {
     selfInfo && setUser(selfInfo);
   }, [onlineMembers, user.uid, setUser]);
 
+  const players = onlineMembers.filter(({ role }) => role === "player");
+  const spectators = onlineMembers.filter(({ role }) => role === "spectator");
+
+  const overDiffUserUIds = useMemo(() => {
+    const points = players.map(({ point }) => point).filter((p) => p >= 0);
+    const uniquePoints = [...new Set(points)];
+    if (uniquePoints.length <= 3) {
+      return [];
+    }
+    const max = Math.max(...uniquePoints);
+    const min = Math.min(...uniquePoints);
+
+    return players
+      .filter(({ point }) => point === min || point === max)
+      .map(({ uid }) => uid);
+  }, [players]);
+
   return {
     all: onlineMembers,
-    players: onlineMembers.filter(({ role }) => role === "player"),
-    spectators: onlineMembers.filter(({ role }) => role === "spectator"),
+    players,
+    spectators,
+    overDiffUserUIds,
   };
 };

@@ -4,6 +4,7 @@ import { PlayerCard } from "@/components/atoms/PlayerCard";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
 import { ForceLogoutModal } from "@/components/features/Room/ForceLogoutModal";
 import { toaster } from "@/components/ui/toaster";
+import { POKER_NUMBERS } from "@/constants";
 import { auth } from "@/libs/firebase";
 import { gerRoomCollectionDoc } from "@/libs/firebase/dataStructure";
 import { setCardsClose, setCardsOpen } from "@/libs/firebase/setOpenResult";
@@ -34,8 +35,6 @@ type Props = {
   roomId: string;
 };
 
-const POKER_NUMBERS = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55] as const;
-
 export const Room = ({ roomId }: Props): ReactNode => {
   const [isLoading, setIsLoading] = useState(true);
   const { open: initialLoginOpen, onClose: handleIInitialLoginClose } =
@@ -47,7 +46,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
   } = useDisclosure({ defaultOpen: false });
   const [selectedCardUid, setSelectedCardUid] = useState("");
   const [user, setUser] = useAtom(userAtom);
-  const { players } = useWatchOnlineMembers(roomId);
+  const { players, overDiffUserUIds } = useWatchOnlineMembers(roomId);
   const { isCardsOpen } = useWatchRoom(roomId);
 
   const userId = auth.currentUser?.uid ?? "";
@@ -157,18 +156,9 @@ export const Room = ({ roomId }: Props): ReactNode => {
                 handleForceLogoutOpen();
               }}
               onClickSelected={() => setStoryPoint(roomId, uid, -1)}
+              diff={overDiffUserUIds.includes(uid)}
             />
           ))}
-          <PlayerCard
-            uid="1"
-            status="unselected"
-            onClickUnselected={() => {
-              setSelectedCardUid("aaa");
-              handleForceLogoutOpen();
-            }}
-          />
-          <PlayerCard uid="2" status="selected" />
-          <PlayerCard uid="3" status="opened" selectedNumber={8} diff={true} />
         </Grid>
       </Box>
 
