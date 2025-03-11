@@ -81,10 +81,6 @@ export const Room = ({ roomId }: Props): ReactNode => {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "不明なエラーが発生しました";
-      toaster.create({
-        type: "error",
-        description: `ログアウトに失敗しました。\n${errorMessage}`,
-      });
     }
   }, [roomId, setUser, userId]);
 

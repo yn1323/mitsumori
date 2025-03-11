@@ -1,21 +1,14 @@
 import { Room } from "@/components/features/Room";
 import { getRoomInfo } from "@/libs/firebase/dataStructure";
-import type { Timestamp } from "firebase/firestore";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: {
-    roomId: string;
-  };
-};
-
-type RoomInfo = {
-  type: "roomInfo";
-  createdAt: Timestamp;
+  params: { roomId: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export default async function RoomPage({ params }: Props) {
-  const { roomId } = await Promise.resolve(params);
+  const { roomId } = params;
   const roomData = await getRoomInfo(roomId);
 
   if (!roomData) {
