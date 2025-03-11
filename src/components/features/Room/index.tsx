@@ -1,5 +1,6 @@
 "use client";
 
+import { Audience } from "@/components/atoms/Audience";
 import { PlayerCard } from "@/components/atoms/PlayerCard";
 import { Result } from "@/components/atoms/Result";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
@@ -46,7 +47,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
   } = useDisclosure({ defaultOpen: false });
   const [selectedCardUid, setSelectedCardUid] = useState("");
   const [user, setUser] = useAtom(userAtom);
-  const { players, overDiffUserUIds } = useWatchOnlineMembers(roomId);
+  const { players, overDiffUserUIds, all } = useWatchOnlineMembers(roomId);
   const { isCardsOpen } = useWatchRoom(roomId);
 
   const userId = auth.currentUser?.uid ?? "";
@@ -234,6 +235,30 @@ export const Room = ({ roomId }: Props): ReactNode => {
           )}
         </VStack>
       </Box>
+
+      {all.length > 0 && (
+        <HStack w="full" justify="space-around" bg="red.50" p={4} rounded="lg">
+          {all.map(({ imageType, uid }) => (
+            <Audience
+              key={uid}
+              type={
+                imageType as
+                  | "0"
+                  | "1"
+                  | "2"
+                  | "3"
+                  | "4"
+                  | "5"
+                  | "6"
+                  | "7"
+                  | "8"
+                  | "9"
+              }
+              uid={uid}
+            />
+          ))}
+        </HStack>
+      )}
 
       <InitialModal
         isOpen={initialLoginOpen}
