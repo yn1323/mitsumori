@@ -4,6 +4,7 @@ import { PlayerCard } from "@/components/atoms/PlayerCard";
 import { Result } from "@/components/atoms/Result";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
 import { ForceLogoutModal } from "@/components/features/Room/ForceLogoutModal";
+import { Loading } from "@/components/ui/loading";
 import { toaster } from "@/components/ui/toaster";
 import { POKER_NUMBERS } from "@/constants";
 import { auth } from "@/libs/firebase";
@@ -107,8 +108,8 @@ export const Room = ({ roomId }: Props): ReactNode => {
 
   if (isLoading) {
     return (
-      <VStack minH="calc(100vh - 64px)">
-        <Text>ローディング中...</Text>
+      <VStack minH="calc(100vh - 64px)" justify="center" align="center">
+        <Loading />
       </VStack>
     );
   }
