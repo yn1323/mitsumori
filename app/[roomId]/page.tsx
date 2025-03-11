@@ -2,13 +2,10 @@ import { Room } from "@/components/features/Room";
 import { getRoomInfo } from "@/libs/firebase/dataStructure";
 import { notFound } from "next/navigation";
 
-type Props = {
-  params: { roomId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+type Params = Promise<{ roomId: string }>;
 
-export default async function RoomPage({ params }: Props) {
-  const { roomId } = params;
+export default async function RoomPage({ params }: { params: Params }) {
+  const { roomId } = await params;
   const roomData = await getRoomInfo(roomId);
 
   if (!roomData) {

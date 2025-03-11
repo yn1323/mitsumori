@@ -25,6 +25,7 @@ export const CreateRoom = () => {
         type: "roomInfo",
         roomId: newRoomId,
         createdAt: new Date(),
+        isCardsOpen: false,
       } satisfies RoomDocType);
 
       router.push(`/${newRoomId}`);
