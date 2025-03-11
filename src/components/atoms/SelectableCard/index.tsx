@@ -4,11 +4,17 @@ import { Box, Text } from "@chakra-ui/react";
 
 type Props = {
   number: number;
+  selectedNumber: number;
   isCardsOpen: boolean;
   onClick?: () => void;
 };
 
-export const SelectableCard = ({ number, isCardsOpen, onClick }: Props) => {
+export const SelectableCard = ({
+  number,
+  selectedNumber,
+  isCardsOpen,
+  onClick,
+}: Props) => {
   return (
     <Box
       bg="white"
@@ -35,7 +41,11 @@ export const SelectableCard = ({ number, isCardsOpen, onClick }: Props) => {
             }
       }
     >
-      <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold">
+      <Text
+        fontSize={{ base: "xl", md: "2xl" }}
+        fontWeight="bold"
+        color={number === selectedNumber ? "green.500" : undefined}
+      >
         {number}
       </Text>
     </Box>

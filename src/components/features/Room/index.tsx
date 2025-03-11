@@ -104,6 +104,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
               <Box key={number} minH="60px">
                 <SelectableCard
                   number={number}
+                  selectedNumber={user.point}
                   isCardsOpen={isCardsOpen}
                   onClick={() => {
                     if (user.role !== "player") {
