@@ -253,6 +253,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
 
         {all.length > 0 && (
           <HStack
+            maxW="1600px"
             w="full"
             justify="space-around"
             bg="red.50"
