@@ -7,6 +7,10 @@ import { usePathname } from "next/navigation";
 export const CopyUrlButton = () => {
   const pathname = usePathname();
 
+  if (pathname === "/") {
+    return null;
+  }
+
   const handleClick = () => {
     const url = window.location.origin + pathname;
     navigator.clipboard.writeText(url);

@@ -1,4 +1,5 @@
 import { CopyUrlButton } from "@/components/features/Header/CopyUrlButton";
+import { AuthGuard } from "@/components/templates/AuthGuard";
 import { ClientWrapper } from "@/components/templates/ClientWrapper";
 import { Provider } from "@/components/ui/provider";
 import { Box, Flex, Text } from "@chakra-ui/react";
@@ -58,7 +59,9 @@ export default function RootLayout({
               </Box>
             </Flex>
           </Box>
-          <Box pt={16}>{children}</Box>
+          <Box pt={16}>
+            <AuthGuard>{children}</AuthGuard>
+          </Box>
           <ClientWrapper />
         </Provider>
       </body>

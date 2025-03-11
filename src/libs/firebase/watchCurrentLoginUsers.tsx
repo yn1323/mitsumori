@@ -1,5 +1,6 @@
 import "client-only";
 
+import { toaster } from "@/components/ui/toaster";
 import {
   type UserDocType,
   roomCollection,
@@ -7,11 +8,13 @@ import {
 import { userAtom } from "@/store/user";
 import { onSnapshot, query, where } from "firebase/firestore";
 import { useAtom } from "jotai";
+import { useRouter } from "next/navigation";
 import {
   type Dispatch,
   type SetStateAction,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -34,6 +37,8 @@ export const watchOnlineMembers = (
 export const useWatchOnlineMembers = (roomId: string) => {
   const [onlineMembers, setOnlineMembers] = useState<UserDocType[]>([]);
   const [user, setUser] = useAtom(userAtom);
+  const router = useRouter();
+  const prevIsOnline = useRef(false);
 
   useEffect(() => {
     const unsubscribe = watchOnlineMembers(roomId, setOnlineMembers);
@@ -42,8 +47,20 @@ export const useWatchOnlineMembers = (roomId: string) => {
 
   useEffect(() => {
     const selfInfo = onlineMembers.find(({ uid }) => uid === user.uid);
-    selfInfo && setUser(selfInfo);
-  }, [onlineMembers, user.uid, setUser]);
+    if (selfInfo) {
+      setUser(selfInfo);
+      prevIsOnline.current = selfInfo.isOnline;
+    }
+
+    // 強制ログアウト時は遷移
+    if (!selfInfo && prevIsOnline.current) {
+      toaster.create({
+        type: "error",
+        description: "強制ログアウトさせられました",
+      });
+      router.push("/");
+    }
+  }, [onlineMembers, user.uid, setUser, router.push]);
 
   const players = onlineMembers.filter(({ role }) => role === "player");
   const spectators = onlineMembers.filter(({ role }) => role === "spectator");

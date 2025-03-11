@@ -4,7 +4,6 @@ import { PlayerCard } from "@/components/atoms/PlayerCard";
 import { Result } from "@/components/atoms/Result";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
 import { ForceLogoutModal } from "@/components/features/Room/ForceLogoutModal";
-import { Loading } from "@/components/ui/loading";
 import { toaster } from "@/components/ui/toaster";
 import { POKER_NUMBERS } from "@/constants";
 import { auth } from "@/libs/firebase";
@@ -26,7 +25,7 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { signInAnonymously, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { updateDoc } from "firebase/firestore";
 import { useAtom } from "jotai";
 import type { ReactNode } from "react";
@@ -38,7 +37,6 @@ type Props = {
 };
 
 export const Room = ({ roomId }: Props): ReactNode => {
-  const [isLoading, setIsLoading] = useState(true);
   const { open: initialLoginOpen, onClose: handleIInitialLoginClose } =
     useDisclosure({ defaultOpen: true });
   const {
@@ -53,21 +51,6 @@ export const Room = ({ roomId }: Props): ReactNode => {
 
   const userId = auth.currentUser?.uid ?? "";
 
-  const signIn = useCallback(async () => {
-    try {
-      await signInAnonymously(auth);
-      setIsLoading(false);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "不明なエラーが発生しました";
-      toaster.create({
-        type: "error",
-        description: `初期化に失敗しました。リフレッシュして再度試してください。\n${errorMessage}`,
-      });
-      setIsLoading(false);
-    }
-  }, []);
-
   const handleLogout = useCallback(async () => {
     if (!userId) return;
 
@@ -79,8 +62,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
       await signOut(auth);
       setUser(defaultUserAtom);
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "不明なエラーが発生しました";
+      error;
     }
   }, [roomId, setUser, userId]);
 
@@ -94,21 +76,12 @@ export const Room = ({ roomId }: Props): ReactNode => {
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
-    signIn();
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       cleanup();
     };
-  }, [signIn, handleLogout]);
-
-  if (isLoading) {
-    return (
-      <VStack minH="calc(100vh - 64px)" justify="center" align="center">
-        <Loading />
-      </VStack>
-    );
-  }
+  }, [handleLogout]);
 
   return (
     <VStack minH="calc(100vh - 64px)" gap={8} p={4}>
