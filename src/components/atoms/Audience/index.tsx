@@ -1,6 +1,7 @@
 import { userAtom } from "@/store/user";
 import { Image, Text, VStack } from "@chakra-ui/react";
 import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
 
 type Props = {
   type: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
@@ -8,8 +9,39 @@ type Props = {
   emoji: string;
 };
 
+type EmojiItem = {
+  id: number;
+  emoji: string;
+};
+
 export const Audience = ({ type, uid, emoji = "" }: Props) => {
   const [user] = useAtom(userAtom);
+  const [emojis, setEmojis] = useState<EmojiItem[]>([]);
+
+  useEffect(() => {
+    if (emoji !== "") {
+      const newEmoji: EmojiItem = {
+        id: Date.now(),
+        emoji,
+      };
+      setEmojis((prev) => [...prev, newEmoji]);
+    }
+  }, [emoji]);
+
+  useEffect(() => {
+    const cleanup = emojis.map((emojiItem) => {
+      const timer = setTimeout(() => {
+        setEmojis((prev) => prev.filter((item) => item.id !== emojiItem.id));
+      }, 1000);
+      return () => clearTimeout(timer);
+    });
+
+    return () => {
+      for (const clear of cleanup) {
+        clear();
+      }
+    };
+  }, [emojis]);
 
   return (
     <>
@@ -31,10 +63,10 @@ export const Audience = ({ type, uid, emoji = "" }: Props) => {
         `}
       </style>
       <VStack gap="2" position="relative">
-        {emoji !== "" && (
+        {emojis.map((emojiItem) => (
           <Text
+            key={emojiItem.id}
             fontSize="2xl"
-            key={Date.now()}
             style={{
               position: "absolute",
               top: "-30px",
@@ -42,9 +74,9 @@ export const Audience = ({ type, uid, emoji = "" }: Props) => {
               animation: "floatUp 1s ease-in forwards",
             }}
           >
-            {emoji}
+            {emojiItem.emoji}
           </Text>
-        )}
+        ))}
         <Image
           src={`/img/${type}.svg`}
           alt={`Story point ${type}`}
