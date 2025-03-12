@@ -21,6 +21,7 @@ export const Audience = ({ type, uid, emotion = {} as any }: Props) => {
   const [user] = useAtom(userAtom);
   const [emojis, setEmojis] = useState<EmojiItem[]>([]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: uuidは連続表示のために必要
   useEffect(() => {
     if (!emotion?.emoji) return;
 
@@ -38,7 +39,7 @@ export const Audience = ({ type, uid, emotion = {} as any }: Props) => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [emotion?.emoji]);
+  }, [emotion?.emoji, emotion?.uuid]);
 
   return (
     <>
