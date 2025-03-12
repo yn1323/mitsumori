@@ -67,7 +67,7 @@ export default function Home() {
   return (
     <main>
       <Container maxW="container.xl" h="calc(100vh - 64px)">
-        <Grid templateRows="auto 1fr auto" gap={8} h="full" py={8}>
+        <Grid templateRows="auto auto 1fr auto" gap={8} h="full" py={8}>
           {/* ヘッドライン */}
           <VStack gap="4" textAlign="center">
             <Heading
@@ -84,6 +84,11 @@ export default function Home() {
               チームの見積もりをリアルタイムで共有。観客モードで気軽に参加できます。
             </Text>
           </VStack>
+
+          {/* ルーム作成 - 中央に配置 */}
+          <Flex justify="center" w="full" py={4}>
+            <CreateRoom />
+          </Flex>
 
           {/* 主要機能 */}
           <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6}>
@@ -105,7 +110,7 @@ export default function Home() {
           </Grid>
 
           {/* 使い方ステップ */}
-          <Flex justify="space-between" wrap="wrap" gap={4}>
+          <Flex justify="space-around" wrap="wrap" gap={4}>
             <Step
               icon={FaPlus}
               title="ルームを作成"
@@ -121,11 +126,6 @@ export default function Home() {
               title="見積もりスタート"
               description="全員の準備が整ったらカードめくり"
             />
-          </Flex>
-
-          {/* ルーム作成 */}
-          <Flex justify="center" w="full">
-            <CreateRoom />
           </Flex>
         </Grid>
       </Container>
