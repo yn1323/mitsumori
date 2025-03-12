@@ -2,10 +2,11 @@ import { CopyUrlButton } from "@/components/features/Header/CopyUrlButton";
 import { AuthGuard } from "@/components/templates/AuthGuard";
 import { ClientWrapper } from "@/components/templates/ClientWrapper";
 import { Provider } from "@/components/ui/provider";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Icon, Text } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import { FaGithub } from "react-icons/fa";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,9 +55,19 @@ export default function RootLayout({
                   MITSUMORI
                 </Text>
               </Link>
-              <Box ml="auto">
+              <Flex ml="auto" gap={4} align="center">
                 <CopyUrlButton />
-              </Box>
+                <Link
+                  href="https://github.com/yn132/mitsumori"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <Icon size="lg" _hover={{ color: "gray.900" }}>
+                    <FaGithub />
+                  </Icon>
+                </Link>
+              </Flex>
             </Flex>
           </Box>
           <Box pt={16}>
