@@ -22,22 +22,23 @@ export const Audience = ({ type, uid, emotion = {} as any }: Props) => {
   const [emojis, setEmojis] = useState<EmojiItem[]>([]);
 
   useEffect(() => {
-    if (emotion.emoji !== "") {
-      const newEmoji: EmojiItem = {
-        id: Date.now(),
-        emoji: emotion.emoji,
-        startPos: Math.random() * 50,
-      };
+    if (!emotion?.emoji) return;
 
-      const timer = setTimeout(() => {
-        setEmojis((prev) => prev.filter((item) => item.id !== newEmoji.id));
-      }, 1000);
+    const id = Date.now();
+    const newEmoji: EmojiItem = {
+      id,
+      emoji: emotion.emoji,
+      startPos: Math.random() * 50,
+    };
 
-      setEmojis((prev) => [...prev, newEmoji]);
+    setEmojis((prev) => [...prev, newEmoji]);
 
-      return () => clearTimeout(timer);
-    }
-  }, [emotion]);
+    const timer = setTimeout(() => {
+      setEmojis((prev) => prev.filter((item) => item.id !== id));
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [emotion?.emoji]);
 
   return (
     <>
