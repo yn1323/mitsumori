@@ -34,7 +34,7 @@ const Feature = ({ icon, title, description }: FeatureProps) => {
     <VStack
       gap="3"
       p={4}
-      bg="whiteAlpha.200"
+      bg="whiteAlpha.500"
       borderRadius="lg"
       align="start"
       h="full"
@@ -56,7 +56,7 @@ type StepProps = {
 
 const Step = ({ icon, title, description }: StepProps) => {
   return (
-    <VStack gap="2" align="center" textAlign="center">
+    <VStack gap="2" align="center" textAlign="center" bg="whiteAlpha.500">
       <Icon as={icon} boxSize={8} color="green.400" />
       <Text fontWeight="bold">{title}</Text>
       <Text fontSize="sm" color="gray.500">
@@ -173,7 +173,7 @@ export default function Home() {
           alignContent="center"
         >
           {/* ヘッドライン */}
-          <VStack gap="4" textAlign="center">
+          <VStack gap="4" textAlign="center" bg="whiteAlpha.500">
             <Heading
               as="h1"
               size="2xl"
