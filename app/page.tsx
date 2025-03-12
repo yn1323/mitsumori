@@ -67,7 +67,13 @@ export default function Home() {
   return (
     <main>
       <Container maxW="container.xl" h="calc(100vh - 64px)">
-        <Grid templateRows="auto auto 1fr auto" gap={8} h="full" py={8}>
+        <Grid
+          templateRows="auto auto auto auto"
+          gap={10}
+          h="full"
+          py={12}
+          alignContent="center"
+        >
           {/* ヘッドライン */}
           <VStack gap="4" textAlign="center">
             <Heading
@@ -86,12 +92,18 @@ export default function Home() {
           </VStack>
 
           {/* ルーム作成 - 中央に配置 */}
-          <Flex justify="center" w="full" py={4}>
+          <Flex justify="center" w="full" py={6}>
             <CreateRoom />
           </Flex>
 
           {/* 主要機能 */}
-          <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6}>
+          <Grid
+            templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+            gap={6}
+            maxW="4xl"
+            mx="auto"
+            w="full"
+          >
             <Feature
               icon={FaSync}
               title="リアルタイム同期"
@@ -110,7 +122,14 @@ export default function Home() {
           </Grid>
 
           {/* 使い方ステップ */}
-          <Flex justify="space-around" wrap="wrap" gap={4}>
+          <Flex
+            justify="space-around"
+            wrap="wrap"
+            gap={8}
+            maxW="4xl"
+            mx="auto"
+            w="full"
+          >
             <Step
               icon={FaPlus}
               title="ルームを作成"
