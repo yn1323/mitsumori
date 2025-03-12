@@ -13,6 +13,7 @@ type Props = {
 type EmojiItem = {
   id: number;
   emoji: string;
+  startPos: number;
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -25,25 +26,18 @@ export const Audience = ({ type, uid, emotion = {} as any }: Props) => {
       const newEmoji: EmojiItem = {
         id: Date.now(),
         emoji: emotion.emoji,
+        startPos: Math.random() * 50,
       };
+
+      const timer = setTimeout(() => {
+        setEmojis((prev) => prev.filter((item) => item.id !== newEmoji.id));
+      }, 1000);
+
       setEmojis((prev) => [...prev, newEmoji]);
+
+      return () => clearTimeout(timer);
     }
   }, [emotion]);
-
-  useEffect(() => {
-    const cleanup = emojis.map((emojiItem) => {
-      const timer = setTimeout(() => {
-        setEmojis((prev) => prev.filter((item) => item.id !== emojiItem.id));
-      }, 1000);
-      return () => clearTimeout(timer);
-    });
-
-    return () => {
-      for (const clear of cleanup) {
-        clear();
-      }
-    };
-  }, [emojis]);
 
   return (
     <>
@@ -52,6 +46,9 @@ export const Audience = ({ type, uid, emotion = {} as any }: Props) => {
           @keyframes floatUp {
             0% {
               transform: translateY(0);
+              opacity: 0;
+            }
+            20% {
               opacity: 1;
             }
             60% {
@@ -72,7 +69,7 @@ export const Audience = ({ type, uid, emotion = {} as any }: Props) => {
             style={{
               position: "absolute",
               top: "-30px",
-              left: "28px",
+              left: emojiItem.startPos,
               animation: "floatUp 1s ease-in forwards",
             }}
           >
