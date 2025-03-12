@@ -2,6 +2,7 @@
 
 import { CreateRoom } from "@/components/features/CreateRoom";
 import {
+  Box,
   Container,
   Flex,
   Grid,
@@ -10,6 +11,8 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 import type { IconType } from "react-icons";
 import {
   FaCheckCircle,
@@ -63,9 +66,104 @@ const Step = ({ icon, title, description }: StepProps) => {
   );
 };
 
-export default function Home() {
+const FloatingImage = () => {
+  const [position, setPosition] = useState(() => ({
+    x:
+      Math.random() *
+      (typeof window !== "undefined" ? window.innerWidth - 100 : 500),
+    y:
+      Math.random() *
+      (typeof window !== "undefined" ? window.innerHeight - 100 : 500),
+  }));
+  const [velocity, setVelocity] = useState(() => ({
+    x: (Math.random() - 0.5) * 2,
+    y: (Math.random() - 0.5) * 2,
+  }));
+  const [imageNumber] = useState(() => Math.floor(Math.random() * 10));
+
+  const animate = useCallback(() => {
+    setPosition((prev) => {
+      setVelocity((currentVel) => {
+        const nextX = prev.x + currentVel.x;
+        const nextY = prev.y + currentVel.y;
+        let newVelX = currentVel.x;
+        let newVelY = currentVel.y;
+
+        if (nextX <= 0 || nextX >= window.innerWidth - 50) {
+          newVelX = -currentVel.x;
+        }
+        if (nextY <= 0 || nextY >= window.innerHeight - 50) {
+          newVelY = -currentVel.y;
+        }
+
+        return newVelX !== currentVel.x || newVelY !== currentVel.y
+          ? { x: newVelX, y: newVelY }
+          : currentVel;
+      });
+
+      return {
+        x: Math.max(0, Math.min(window.innerWidth - 50, prev.x + velocity.x)),
+        y: Math.max(0, Math.min(window.innerHeight - 50, prev.y + velocity.y)),
+      };
+    });
+  }, [velocity.x, velocity.y]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setPosition((prev) => ({
+        x: Math.min(prev.x, window.innerWidth - 50),
+        y: Math.min(prev.y, window.innerHeight - 50),
+      }));
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    let animationId: number;
+    const updateFrame = () => {
+      animate();
+      animationId = requestAnimationFrame(updateFrame);
+    };
+    animationId = requestAnimationFrame(updateFrame);
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [animate]);
+
   return (
-    <main>
+    <Box
+      position="absolute"
+      left={position.x}
+      top={position.y}
+      width="50px"
+      height="50px"
+      opacity={0.4}
+      transition="none"
+      pointerEvents="none"
+    >
+      <Image
+        src={`/img/${imageNumber}.svg`}
+        alt="floating number"
+        width={50}
+        height={50}
+      />
+    </Box>
+  );
+};
+
+export default function Home() {
+  const [floatingImages] = useState(() =>
+    Array.from({ length: 10 }, (_, i) => i),
+  );
+
+  return (
+    <main style={{ position: "relative", overflow: "hidden" }}>
+      {floatingImages.map((i) => (
+        <FloatingImage key={i} />
+      ))}
       <Container maxW="container.xl" h="calc(100vh - 64px)">
         <Grid
           templateRows="auto auto auto auto"
