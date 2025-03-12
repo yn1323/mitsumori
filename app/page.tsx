@@ -173,7 +173,7 @@ export default function Home() {
           alignContent="center"
         >
           {/* ヘッドライン */}
-          <VStack gap="4" textAlign="center" bg="whiteAlpha.500">
+          <VStack gap="4" textAlign="center">
             <Heading
               as="h1"
               size="2xl"

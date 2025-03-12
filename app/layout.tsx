@@ -38,7 +38,6 @@ export default function RootLayout({
             left={0}
             right={0}
             bg="white"
-            shadow="sm"
             zIndex={1}
           >
             <Flex px={4} py={3} maxW="container.xl" mx="auto" align="center">
