@@ -46,7 +46,7 @@ export default function RootLayout({
                 style={{ textDecoration: "none", display: "block" }}
               >
                 <Text
-                  fontSize="xl"
+                  fontSize="2xl"
                   fontWeight="bold"
                   _hover={{ opacity: 0.8 }}
                   cursor="pointer"

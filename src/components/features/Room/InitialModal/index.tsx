@@ -103,12 +103,14 @@ export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
             <RadioGroup>
               <RadioCardRoot name="role">
                 <RadioCardItem
+                  colorPalette="orange"
                   label="プレイヤー"
                   description="プランニングポーカーで見積もりを行います。"
                   key="player"
                   value="player"
                 />
                 <RadioCardItem
+                  colorPalette="orange"
                   label="観戦者"
                   description="他の参加者の見積もりを見ることができます。野次もOK。"
                   key="spectator"
@@ -123,6 +125,7 @@ export const InitialModal = ({ isOpen, onClose, roomId }: Props) => {
               colorScheme="blue"
               loading={isLoading}
               loadingText="参加中"
+              colorPalette="orange"
             >
               参加する
             </Button>

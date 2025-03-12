@@ -202,7 +202,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
               </Text>
               <HStack gap={4} justify="center" w="full">
                 <Button
-                  colorScheme="green"
+                  colorPalette="orange"
                   onClick={async () => {
                     if (user.role !== "player") {
                       toaster.create({
@@ -217,7 +217,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
                   開票
                 </Button>
                 <Button
-                  colorScheme="blue"
+                  colorPalette="teal"
                   onClick={async () => {
                     if (user.role !== "player") {
                       toaster.create({

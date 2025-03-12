@@ -63,7 +63,7 @@ export const CreateRoom = () => {
     <Box p={6} bg="white" shadow="md" rounded="md" width="600px">
       <VStack gap={4}>
         <Button
-          colorScheme="blue"
+          colorPalette="orange"
           size="lg"
           width="full"
           onClick={handleClick}

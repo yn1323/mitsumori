@@ -22,7 +22,7 @@ export const CopyUrlButton = () => {
   };
 
   return (
-    <Button size="sm" onClick={handleClick}>
+    <Button size="sm" onClick={handleClick} colorPalette="orange">
       URLをコピー
     </Button>
   );
