@@ -2,7 +2,6 @@
 
 import { CreateRoom } from "@/components/features/CreateRoom";
 import {
-  Box,
   Container,
   Flex,
   Grid,
@@ -125,9 +124,9 @@ export default function Home() {
           </Flex>
 
           {/* ルーム作成 */}
-          <Box>
+          <Flex justify="center" w="full">
             <CreateRoom />
-          </Box>
+          </Flex>
         </Grid>
       </Container>
     </main>
