@@ -2,7 +2,7 @@ import { CopyUrlButton } from "@/components/features/Header/CopyUrlButton";
 import { AuthGuard } from "@/components/templates/AuthGuard";
 import { ClientWrapper } from "@/components/templates/ClientWrapper";
 import { Provider } from "@/components/ui/provider";
-import { Box, Flex, Icon, Text } from "@chakra-ui/react";
+import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
@@ -58,14 +58,14 @@ export default function RootLayout({
               <Flex ml="auto" gap={4} align="center">
                 <CopyUrlButton />
                 <Link
-                  href="https://github.com/yn132/mitsumori"
+                  href="https://github.com/yn1323/mitsumori"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  <Icon size="lg" _hover={{ color: "gray.900" }}>
+                  <IconButton variant="ghost">
                     <FaGithub />
-                  </Icon>
+                  </IconButton>
                 </Link>
               </Flex>
             </Flex>
