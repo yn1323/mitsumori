@@ -4,6 +4,7 @@ import { Audience } from "@/components/atoms/Audience";
 import { PlayerCard } from "@/components/atoms/PlayerCard";
 import { Result } from "@/components/atoms/Result";
 import { SelectableCard } from "@/components/atoms/SelectableCard";
+import { EmoButtons } from "@/components/features/EmoButtons";
 import { ForceLogoutModal } from "@/components/features/Room/ForceLogoutModal";
 import { toaster } from "@/components/ui/toaster";
 import { POKER_NUMBERS } from "@/constants";
@@ -50,6 +51,8 @@ export const Room = ({ roomId }: Props): ReactNode => {
   const { players, overDiffUserUIds, all } = useWatchOnlineMembers(roomId);
   const { isCardsOpen } = useWatchRoom(roomId);
 
+  const [debugEmoji, setDebugEmoji] = useState("");
+
   const userId = auth.currentUser?.uid ?? "";
 
   const handleLogout = useCallback(async () => {
@@ -84,8 +87,13 @@ export const Room = ({ roomId }: Props): ReactNode => {
     };
   }, [handleLogout]);
 
+  const handleClickEmoji = (emoji: string) => {
+    setDebugEmoji(emoji);
+  };
+
   return (
     <Box h="calc(100vh - 64px)" overflowY="auto" p={4}>
+      <EmoButtons onClick={handleClickEmoji} />
       <VStack gap={8} minH="min-content">
         <Box
           w="full"
@@ -277,6 +285,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
                     | "9"
                 }
                 uid={uid}
+                emoji={debugEmoji}
               />
             ))}
           </HStack>
