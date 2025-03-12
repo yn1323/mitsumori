@@ -10,12 +10,14 @@ import { toaster } from "@/components/ui/toaster";
 import { POKER_NUMBERS } from "@/constants";
 import { auth } from "@/libs/firebase";
 import { gerRoomCollectionDoc } from "@/libs/firebase/dataStructure";
+import { setEmoji } from "@/libs/firebase/setEmotion";
 import { setCardsClose, setCardsOpen } from "@/libs/firebase/setOpenResult";
 import {
   resetAllUserStoryPoints,
   setStoryPoint,
 } from "@/libs/firebase/setStoryPoint";
 import { useWatchOnlineMembers } from "@/libs/firebase/watchCurrentLoginUsers";
+import { useEmotion } from "@/libs/firebase/watchEmotion";
 import { useWatchRoom } from "@/libs/firebase/watchRoom";
 import { defaultUserAtom, userAtom } from "@/store/user";
 import {
@@ -50,8 +52,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
   const [user, setUser] = useAtom(userAtom);
   const { players, overDiffUserUIds, all } = useWatchOnlineMembers(roomId);
   const { isCardsOpen } = useWatchRoom(roomId);
-
-  const [debugEmoji, setDebugEmoji] = useState("");
+  const { emotions } = useEmotion(roomId);
 
   const userId = auth.currentUser?.uid ?? "";
 
@@ -88,7 +89,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
   }, [handleLogout]);
 
   const handleClickEmoji = (emoji: string) => {
-    setDebugEmoji(emoji);
+    setEmoji(roomId, userId, emoji);
   };
 
   return (
@@ -139,7 +140,6 @@ export const Room = ({ roomId }: Props): ReactNode => {
             </Grid>
           </VStack>
         </Box>
-
         <Box
           w="full"
           maxW="1600px"
@@ -194,7 +194,6 @@ export const Room = ({ roomId }: Props): ReactNode => {
             </Grid>
           )}
         </Box>
-
         <Box w="full" maxW="1600px" bg="green.50" p={4} rounded="lg">
           <VStack gap={6} w="full">
             <Box>
@@ -258,7 +257,6 @@ export const Room = ({ roomId }: Props): ReactNode => {
             )}
           </VStack>
         </Box>
-
         {all.length > 0 && (
           <HStack
             maxW="1600px"
@@ -285,12 +283,11 @@ export const Room = ({ roomId }: Props): ReactNode => {
                     | "9"
                 }
                 uid={uid}
-                emoji={debugEmoji}
+                emotion={emotions.find((e) => e.uid === uid)}
               />
             ))}
           </HStack>
         )}
-
         <InitialModal
           isOpen={initialLoginOpen}
           onClose={handleIInitialLoginClose}

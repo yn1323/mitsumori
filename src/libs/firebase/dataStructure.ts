@@ -25,6 +25,13 @@ export type UserDocType = {
   uid: string;
 };
 
+export type EmotionDocType = {
+  type: string;
+  uid: string;
+  emoji: string;
+  uuid: string;
+};
+
 export const roomCollection = (roomId: string) =>
   collection(db, "mitsumori", "room", roomId);
 

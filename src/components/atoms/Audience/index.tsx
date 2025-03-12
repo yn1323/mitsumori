@@ -1,3 +1,4 @@
+import type { EmotionDocType } from "@/libs/firebase/dataStructure";
 import { userAtom } from "@/store/user";
 import { Image, Text, VStack } from "@chakra-ui/react";
 import { useAtom } from "jotai";
@@ -6,7 +7,7 @@ import { useEffect, useState } from "react";
 type Props = {
   type: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
   uid: string;
-  emoji: string;
+  emotion?: EmotionDocType;
 };
 
 type EmojiItem = {
@@ -14,19 +15,20 @@ type EmojiItem = {
   emoji: string;
 };
 
-export const Audience = ({ type, uid, emoji = "" }: Props) => {
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export const Audience = ({ type, uid, emotion = {} as any }: Props) => {
   const [user] = useAtom(userAtom);
   const [emojis, setEmojis] = useState<EmojiItem[]>([]);
 
   useEffect(() => {
-    if (emoji !== "") {
+    if (emotion.emoji !== "") {
       const newEmoji: EmojiItem = {
         id: Date.now(),
-        emoji,
+        emoji: emotion.emoji,
       };
       setEmojis((prev) => [...prev, newEmoji]);
     }
-  }, [emoji]);
+  }, [emotion]);
 
   useEffect(() => {
     const cleanup = emojis.map((emojiItem) => {
