@@ -1,11 +1,37 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
+      day: "sunday"
+    target-branch: "dependabot"
+    versioning-strategy: "auto"
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      chakra:
+        patterns:
+          - "@chakra-ui/*"
+      firebase:
+        patterns:
+          - "firebase"
+          - "@firebase/*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "@typescript-eslint/*"
+    commit-message:
+      prefix: "⬆️"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "/"
+    open-pull-requests-limit: 10
+    automerge: true
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
