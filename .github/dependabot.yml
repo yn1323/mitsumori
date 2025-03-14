@@ -28,6 +28,4 @@ updates:
         patterns:
           - "eslint"
           - "@typescript-eslint/*"
-    pull-request-branch-name:
-      separator: "/"
     open-pull-requests-limit: 20
