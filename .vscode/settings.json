@@ -9,5 +9,5 @@
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "cSpell.words": ["mitsumori"]
+  "cSpell.words": ["mitsumori", "NZVCXXWR"]
 }

@@ -3,6 +3,7 @@ import { AuthGuard } from "@/components/templates/AuthGuard";
 import { ClientWrapper } from "@/components/templates/ClientWrapper";
 import { Provider } from "@/components/ui/provider";
 import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
+import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
@@ -30,6 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <GoogleTagManager gtmId={process.env.GTM_ID ?? ""} />
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>
           <Box
