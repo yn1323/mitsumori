@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <GoogleTagManager gtmId={process.env.GTM_ID ?? ""} />
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID ?? ""} />
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>
           <Box
