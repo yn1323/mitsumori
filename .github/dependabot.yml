@@ -1,0 +1,33 @@
+version: 2
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: "daily"
+    target-branch: "dependabot"
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    target-branch: "dependabot"
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      chakra:
+        patterns:
+          - "@chakra-ui/*"
+      firebase:
+        patterns:
+          - "firebase"
+          - "@firebase/*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "@typescript-eslint/*"
+    pull-request-branch-name:
+      separator: "/"
+    open-pull-requests-limit: 20
