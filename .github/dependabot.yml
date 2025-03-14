@@ -1,10 +1,15 @@
 version: 2
 updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: "daily"
+    target-branch: "dependabot"
+    versioning-strategy: "auto"
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "sunday"
+      interval: "daily"
     target-branch: "dependabot"
     versioning-strategy: "auto"
     groups:
@@ -25,13 +30,6 @@ updates:
         patterns:
           - "eslint"
           - "@typescript-eslint/*"
-    commit-message:
-      prefix: "⬆️"
-      include: "scope"
     pull-request-branch-name:
       separator: "/"
-    open-pull-requests-limit: 10
-    automerge: true
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+    open-pull-requests-limit: 20
