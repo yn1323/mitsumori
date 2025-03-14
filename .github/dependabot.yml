@@ -1,11 +1,15 @@
 version: 2
 updates:
   - package-ecosystem: 'github-actions'
+    reviewers:
+      - 'yn1323'
     directory: '/'
     schedule:
       interval: "daily"
     target-branch: "dependabot"
   - package-ecosystem: "npm"
+    reviewers:
+      - 'yn1323'
     directory: "/"
     schedule:
       interval: "daily"
