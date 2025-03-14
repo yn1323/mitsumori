@@ -5,7 +5,6 @@ updates:
     schedule:
       interval: "daily"
     target-branch: "dependabot"
-    versioning-strategy: "auto"
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
