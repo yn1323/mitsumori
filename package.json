@@ -10,7 +10,7 @@
     "lint:fix": "biome check --write app src"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.13.0",
+    "@chakra-ui/react": "^3.14.1",
     "@emotion/react": "^11.14.0",
     "@next/third-parties": "^15.2.3",
     "firebase": "^11.5.0",
