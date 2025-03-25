@@ -12,7 +12,7 @@
   "dependencies": {
     "@chakra-ui/react": "^3.13.0",
     "@emotion/react": "^11.14.0",
-    "@next/third-parties": "^15.2.3",
+    "@next/third-parties": "^15.2.4",
     "firebase": "^11.5.0",
     "jotai": "^2.12.1",
     "next": "15.2.3",
