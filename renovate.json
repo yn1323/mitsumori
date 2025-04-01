@@ -1,27 +1,51 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["config:base"],
-    "timezone": "Asia/Tokyo",
-    "labels": ["renovate"],
-    "baseBranches": ["renovate"],
-    "automerge": true,
-    "schedule": ["every weekend"],
-    "packageRules": [
-      {
-        "matchPackagePatterns": ["react"],
-        "addLabels": ["react"]
-      },
-      {
-        "matchPackagePatterns": ["@chakra-ui"],
-        "addLabels": ["@chakra-ui"]
-      },
-      {
-        "matchPackagePatterns": ["firebase"],
-        "addLabels": ["firebase"]
-      },
-      {
-        "matchPackagePatterns": ["eslint"],
-        "addLabels": ["eslint"]
-      }
-    ]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "timezone": "Asia/Tokyo",
+  "labels": [
+    "renovate"
+  ],
+  "baseBranches": [
+    "renovate"
+  ],
+  "automerge": true,
+  "schedule": [
+    "every weekend"
+  ],
+  "packageRules": [
+    {
+      "addLabels": [
+        "react"
+      ],
+      "matchPackageNames": [
+        "/react/"
+      ]
+    },
+    {
+      "addLabels": [
+        "@chakra-ui"
+      ],
+      "matchPackageNames": [
+        "/@chakra-ui/"
+      ]
+    },
+    {
+      "addLabels": [
+        "firebase"
+      ],
+      "matchPackageNames": [
+        "/firebase/"
+      ]
+    },
+    {
+      "addLabels": [
+        "eslint"
+      ],
+      "matchPackageNames": [
+        "/eslint/"
+      ]
+    }
+  ]
 }
