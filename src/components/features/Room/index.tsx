@@ -105,21 +105,21 @@ export const Room = ({ roomId }: Props): ReactNode => {
           rounded="lg"
         >
           <VStack w="full" gap={4}>
-            <Text fontSize="lg" fontWeight="bold">
+            <Text fontSize="md" fontWeight="bold">
               ポイントを選択してください
             </Text>
             <Grid
               templateColumns={{
-                base: "repeat(3, 1fr)",
-                sm: "repeat(5, 1fr)",
-                md: "repeat(8, 1fr)",
-                lg: "repeat(10, 1fr)",
+                base: "repeat(5, 1fr)",
+                sm: "repeat(8, 1fr)",
+                md: "repeat(10, 1fr)",
+                lg: "repeat(13, 1fr)",
               }}
-              gap={4}
+              gap={2}
               w="full"
             >
               {POKER_NUMBERS.map((number) => (
-                <Box key={number} minH="60px">
+                <Box key={number} minH="40px">
                   <SelectableCard
                     number={number}
                     selectedNumber={user.point}
@@ -143,7 +143,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
         <Box
           w="full"
           maxW="1600px"
-          minH="300px"
+          minH="200px"
           bg="gray.50"
           p={4}
           rounded="lg"
@@ -169,7 +169,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
               w="full"
             >
               {players.map(({ uid, point }) => (
-                <Box key={uid} minH="120px">
+                <Box key={uid} minH="100px">
                   <PlayerCard
                     uid={uid}
                     selectedNumber={point}
@@ -195,12 +195,12 @@ export const Room = ({ roomId }: Props): ReactNode => {
           )}
         </Box>
         <Box w="full" maxW="1600px" bg="green.50" p={4} rounded="lg">
-          <VStack gap={6} w="full">
+          <Text fontSize="lg" fontWeight="bold" mb={4} textAlign="center">
+            投票結果
+          </Text>
+          <HStack gap={6} justify="center" w="full">
             <Box>
-              <Text fontSize="lg" fontWeight="bold" mb={4} textAlign="center">
-                投票結果
-              </Text>
-              <HStack gap={4} justify="center" w="full">
+              <VStack gap={4} align="left" w="full">
                 <Button
                   colorPalette="orange"
                   onClick={async () => {
@@ -232,7 +232,7 @@ export const Room = ({ roomId }: Props): ReactNode => {
                 >
                   リセット
                 </Button>
-              </HStack>
+              </VStack>
             </Box>
             {isCardsOpen ? (
               <Box py={2} minH="130px">
@@ -249,13 +249,14 @@ export const Room = ({ roomId }: Props): ReactNode => {
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
+                w="400px"
               >
                 <Text color="gray.500" fontSize="sm" textAlign="center">
                   開票ボタンをクリックすると、投票結果が表示されます
                 </Text>
               </Box>
             )}
-          </VStack>
+          </HStack>
         </Box>
         {all.length > 0 && (
           <HStack
