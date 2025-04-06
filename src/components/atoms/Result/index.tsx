@@ -11,7 +11,7 @@ export const Result = ({ points }: Props) => {
       : 0;
 
   return (
-    <Box p={4} bg="gray.50" borderRadius="md">
+    <Box p={4} bg="gray.50" borderRadius="md" w="400px">
       <Text fontSize="lg" fontWeight="bold" mb={2}>
         結果
       </Text>
