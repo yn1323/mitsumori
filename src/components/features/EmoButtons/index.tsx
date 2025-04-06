@@ -5,7 +5,7 @@ type Props = {
 };
 
 export const EmoButtons = ({ onClick }: Props) => {
-  const emojis = ["👍", "👏", "🎉", "🤔", "😊", "😢"];
+  const emojis = ["👍", "👏", "🎉", "🤔", "😊", "😢", "💩"];
 
   return (
     <Box
