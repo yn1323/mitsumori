@@ -1,1 +1,1 @@
-export const POKER_NUMBERS = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55] as const;
+export const POKER_NUMBERS = [0.25, 0.5, 1,2,3,5,7,10,15,20,25,30] as const;
